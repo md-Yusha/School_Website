@@ -63,3 +63,10 @@ def student_dashboard(request):
             return redirect('student_login')  # Redirect back to login if student doesn't exist
     else:
         return redirect('student_login')  # Redirect to login if no session
+    
+def student_logout(request):
+    try:
+        del request.session['student_usn']  # Clear the student session
+    except KeyError:
+        pass  # If the session key doesn't exist, just continue
+    return redirect('student_login')  # Redirect to login page after logout

@@ -15,5 +15,9 @@
     <p><strong>Address:</strong> {{ student.address }}</p>
     <p><strong>Aadhaar Number:</strong> {{ student.aadhar_number }}</p>
     <p><strong>Fees Balance:</strong> ₹{{ student.fee_balance }}</p>
+    <form action="{% url 'student_logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
 </body>
 </html>
