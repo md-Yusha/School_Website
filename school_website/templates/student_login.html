@@ -1,0 +1,55 @@
+<!-- school/templates/school/student_login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login</title>
+</head>
+<body>
+    <h2>Student Login</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="usn" placeholder="Enter USN" required>
+        <input type="password" name="password" placeholder="Enter Password" required>
+        <button type="submit">Login</button>
+    </form>
+    
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div id="error-message" style="color: red; display: none;"></div>
+
+    <script>
+        // Handling form submission with JavaScript
+        document.getElementById('studentLoginForm').onsubmit = async function(event) {
+            event.preventDefault();  // Prevent the form from being submitted normally
+        
+            const usn = document.getElementById('usn').value;
+            const password = document.getElementById('password').value;
+        
+            const response = await fetch('/student/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+                body: JSON.stringify({ usn, password })
+            });
+        
+            const result = await response.json();
+        
+            if (result.success) {
+                window.location.href = '/student/dashboard/';  // Redirect to dashboard if login is successful
+            } else {
+                document.getElementById('error-message').textContent = result.message;
+                document.getElementById('error-message').style.display = 'block';
+            }
+        };
+    </script>
+</body>
+</html>
