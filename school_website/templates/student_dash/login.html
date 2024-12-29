@@ -4,20 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f7f7f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 20px; /* Added padding for smaller screens */
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        form {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px 30px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px; /* Added margin for spacing */
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input {
+            padding: 14px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #0366d6;
+            outline: none;
+        }
+
+        button {
+            padding: 16px 24px;
+            font-size: 16px;
+            background-color: #28a745; /* Green color for the button */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #218838; /* Darker green on hover */
+            transform: scale(1.05);
+        }
+
+        .required::after {
+            content: " *";
+            color: red;
+        }
+
+
+        @media (max-width: 600px) {
+            form {
+                padding: 30px 20px;
+            }
+
+            .form-group input {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
     <h1>Login</h1>
-    <form method="post">
+    <form method="post" aria-label="Login Form">
         {% csrf_token %}
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+        <div class="form-group">
+            <label for="username" class="required">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required aria-required="true">
         </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+        <div class="form-group">
+            <label for="password" class="required">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required aria-required="true">
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" aria-label="Submit Login">Login</button>
     </form>
 </body>
 </html>

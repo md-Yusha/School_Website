@@ -22,7 +22,7 @@ def loginUser(request):
         if user is not None:
             login(request,user)
             messages.success(request, str(request.user)+'Login successful.')
-            return redirect('/register')
+            return redirect('/dashboard/'+str(request.user))
         else:
             messages.error(request, 'Invalid username or password.')
     return render(request,'student_dash/login.html')
@@ -79,6 +79,22 @@ def registerUser(request):
 
     return render(request,'student_dash/register.html')
 
+
+def dashboard(request,username):
+    if str(request.user) != username:
+        return redirect('login')
+    user_data = {
+        'username': request.user,
+        'email': UserProfile.objects.get(user=request.user).email,
+        'name': UserProfile.objects.get(user=request.user).Name,
+        'class': UserProfile.objects.get(user=request.user).Class,
+        'father_name': UserProfile.objects.get(user=request.user).Father_name,
+        'phone_number': UserProfile.objects.get(user=request.user).phone_number,
+        'alt_number': UserProfile.objects.get(user=request.user).alt_number,
+        'address': UserProfile.objects.get(user=request.user).address,
+        'fee_due': UserProfile.objects.get(user=request.user).Fee_Due,
+    }
+    return render(request,'student_dash/dashboard.html',{"student":user_data})
 def otp_api(request):
     if request.method == "POST":
         data = json.loads(request.body)
