@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        form {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .form-group {
+            flex: 1 1 calc(50% - 20px);
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        .form-group.full-width {
+            flex: 1 1 100%;
+        }
+        button {
+            padding: 12px 24px; /* Improved button padding */
+            font-size: 16px; /* Larger, readable font */
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05); /* Subtle hover scaling effect */
+        }
+        .otp-btn {
+            padding: 12px 24px; /* Improved padding */
+            font-size: 16px;
+            background-color: #007BFF;
+            border-radius: 4px;
+        }
+        .otp-btn:hover {
+            background-color: #0056b3;
+        }
+        .otp-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .required::after {
+            content: " *";
+            color: red;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 600px) {
+            .form-group {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Register</h1>
+    <form id="registration-form" method="POST" action="/register/">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="username" class="required">Username:</label>
+            <input type="text" id="username" name="username" required placeholder="Enter your username">
+        </div>
+
+        <div class="form-group">
+            <label for="email" class="required">Email:</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email">
+        </div>
+
+        <div class="form-group">
+            <button type="button" class="otp-btn" id="get-otp" onclick="handleGetOTP()">Get OTP</button>
+            <button type="button" class="otp-btn hidden" id="resend-otp" disabled onclick="handleResendOTP()">Resend OTP</button>
+        </div>
+
+        <div class="form-group">
+            <label for="otp" class="required">OTP:</label>
+            <input type="text" id="otp" name="otp" required placeholder="Enter OTP">
+        </div>
+
+        <div class="form-group">
+            <label for="password" class="required">Password:</label>
+            <input type="password" id="password" name="password" required placeholder="Enter your password">
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="required">Name:</label>
+            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+        </div>
+
+        <div class="form-group">
+            <label for="class" class="required">Class:</label>
+            <input type="text" id="class" name="class" maxlength="3" required placeholder="e.g., 10A">
+        </div>
+
+        <div class="form-group">
+            <label for="father_name">Father's Name:</label>
+            <input type="text" id="father_name" name="father_name" placeholder="Enter father's name">
+        </div>
+
+        <div class="form-group">
+            <label for="phone_number" class="required">Phone Number:</label>
+            <input type="text" id="phone_number" name="phone_number" required placeholder="Enter your phone number">
+        </div>
+
+        <div class="form-group">
+            <label for="alt_number">Alternate Number:</label>
+            <input type="text" id="alt_number" name="alt_number" placeholder="Enter an alternate phone number">
+        </div>
+
+        <div class="form-group full-width">
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" rows="3" placeholder="Enter your address"></textarea>
+        </div>
+
+        <div class="form-group full-width">
+            <button type="submit">Register</button>
+        </div>
+    </form>
+
+    <script>
+        let resendDelay = 30; // Initial delay in seconds
+        let timer;
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        async function sendOTPRequest(action) {
+            const email = document.getElementById('email').value;
+        
+            try {
+                const response = await fetch('/otp_api/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        action: action // 'get' for Get OTP, 'resend' for Resend OTP
+                    }),
+                });
+        
+                const data = await response.json();
+                if (response.ok) {
+                    alert(data.message || `OTP ${action === 'get' ? 'sent' : 'resent'} successfully!`);
+                } else {
+                    alert(data.error || 'An error occurred while processing your request.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to send OTP. Please try again later.');
+            }
+        }
+
+        function handleGetOTP() {
+            const email = document.getElementById('email').value;
+            if (!validateEmail(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+            document.getElementById('get-otp').classList.add('hidden');
+            document.getElementById('resend-otp').classList.remove('hidden');
+            sendOTPRequest('get');
+            startTimer();
+        }
+
+        function handleResendOTP() {
+            const email = document.getElementById('email').value;
+            if (!validateEmail(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+            sendOTPRequest('resend');
+            startTimer();
+        }
+
+        function startTimer() {
+            const resendButton = document.getElementById('resend-otp');
+            resendButton.disabled = true;
+
+            let countdown = resendDelay;
+            resendButton.textContent = `Resend OTP (${countdown}s)`;
+
+            timer = setInterval(() => {
+                countdown--;
+                resendButton.textContent = `Resend OTP (${countdown}s)`;
+
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    resendButton.textContent = 'Resend OTP';
+                    resendButton.disabled = false;
+                    resendDelay += 30; // Increase delay after each attempt
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
