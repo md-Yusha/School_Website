@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Input Form</title>
+</head>
+<body>
+    <h1>Generate Fee Bill</h1>
+    <form method="POST" action="{% url 'generate_bill' %}">
+        {% csrf_token %}
+        <label for="name">Student Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="usn">USN:</label>
+        <input type="text" id="usn" name="usn" required><br><br>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required><br><br>
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" required><br><br>
+
+        <label for="fee_due">Fee Due:</label>
+        <input type="number" id="fee_due" name="fee_due"><br><br>
+
+        <label for="payment_mode">Payment Mode:</label><br>
+        <input type="radio" id="online" name="payment_mode" value="online" required>
+        <label for="online">Online</label><br>
+        <input type="radio" id="offline" name="payment_mode" value="offline" required>
+        <label for="offline">Offline</label><br><br>
+
+        <div id="online_details" style="display: none;">
+            <label for="transaction_id">Transaction ID:</label>
+            <input type="text" id="transaction_id" name="transaction_id"><br><br>
+        </div>
+
+        <div id="offline_details" style="display: none;">
+            <label for="receiver">Receiver's Name:</label>
+            <input type="text" id="receiver" name="receiver"><br><br>
+        </div>
+
+        <button type="submit">Generate Bill</button>
+    </form>
+
+    <script>
+        document.querySelectorAll('input[name="payment_mode"]').forEach(input => {
+            input.addEventListener('change', function () {
+                if (this.value === 'online') {
+                    document.getElementById('online_details').style.display = 'block';
+                    document.getElementById('offline_details').style.display = 'none';
+                } else {
+                    document.getElementById('online_details').style.display = 'none';
+                    document.getElementById('offline_details').style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .pdf-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        iframe {
+            border: none;
+        }
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    {% if request.session.pdf_file %}
+        <h1>Bill Preview</h1>
+
+        <!-- PDF Preview in an iframe -->
+        <div class="pdf-container">
+            <iframe src="data:application/pdf;base64,{{ request.session.pdf_file }}" width="100%" height="600px"></iframe>
+        </div>
+
+        <!-- Buttons for printing and downloading -->
+        <div class="buttons">
+            <!-- Print Button -->
+            <button onclick="printPDF()">Print Bill</button>
+
+            <!-- Download Button -->
+            <a href="data:application/pdf;base64,{{ request.session.pdf_file }}" download="bill.pdf">
+                <button>Download Bill</button>
+            </a>
+        </div>
+
+    {% else %}
+        <p>No bill data available.</p>
+    {% endif %}
+
+    <script>
+        function printPDF() {
+            var pdfData = "{{ request.session.pdf_file }}";
+
+            // Create a new Blob object from the base64 string
+            var byteCharacters = atob(pdfData); // Decode base64 to bytes
+            var byteArrays = [];
+
+            for (var offset = 0; offset < byteCharacters.length; offset += 1024) {
+                var slice = byteCharacters.slice(offset, offset + 1024);
+                var byteNumbers = new Array(slice.length);
+                for (var i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                byteArrays.push(new Uint8Array(byteNumbers));
+            }
+
+            var blob = new Blob(byteArrays, { type: "application/pdf" });
+            var blobURL = URL.createObjectURL(blob);
+
+            // Open the PDF in a new window
+            var pdfWindow = window.open('', '_blank', 'width=800,height=600');
+            pdfWindow.document.open();
+            pdfWindow.document.write('<html><head><title>Print Bill</title></head><body>');
+            pdfWindow.document.write('<embed src="' + blobURL + '" width="100%" height="100%" />');
+            pdfWindow.document.write('</body></html>');
+            pdfWindow.document.close();
+
+            // Trigger the print dialog after the PDF is loaded
+            pdfWindow.onload = function() {
+                pdfWindow.print();
+                pdfWindow.close();
+            };
+        }
+    </script>
+
+</body>
+</html>

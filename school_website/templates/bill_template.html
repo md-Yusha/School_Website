@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bill</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .bill-container {
+            border: 1px solid #000;
+            padding: 20px;
+        }
+        .bill-header {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .bill-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .bill-details th, .bill-details td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="bill-container">
+        <div class="bill-header">
+            <h2>School Name</h2>
+            <p>Fee Payment Receipt</p>
+        </div>
+        <div class="bill-details">
+            <table>
+                <tr>
+                    <th>Student Name</th>
+                    <td>{{ name }}</td>
+                </tr>
+                <tr>
+                    <th>USN</th>
+                    <td>{{ usn }}</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td>{{ date }}</td>
+                </tr>
+                <tr>
+                    <th>Amount</th>
+                    <td>₹{{ amount }}</td>
+                </tr>
+                <tr>
+                    <th>Fee Due</th>
+                    <td>₹{{ fee_due }}</td>
+                </tr>
+                <tr>
+                    <th>Payment Mode</th>
+                    <td>{{ payment_mode }}</td>
+                </tr>
+                {% if payment_mode == "online" %}
+                <tr>
+                    <th>Transaction ID</th>
+                    <td>{{ transaction_id }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <th>Receiver</th>
+                    <td>{{ receiver }}</td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>
