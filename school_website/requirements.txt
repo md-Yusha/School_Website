@@ -1,0 +1,5 @@
+Django==5.1.4
+pillow==11.0.0
+weasyprint==63.1
+cssselect2==0.7.0
+sqlparse==0.5.3
