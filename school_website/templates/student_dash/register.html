@@ -5,87 +5,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        form {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .form-group {
-            flex: 1 1 calc(50% - 20px);
-            display: flex;
-            flex-direction: column;
-        }
-        .form-group label {
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input,
-        .form-group textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: #4CAF50;
-            outline: none;
-        }
-        .form-group.full-width {
-            flex: 1 1 100%;
-        }
-        button {
-            padding: 12px 24px; /* Improved button padding */
-            font-size: 16px; /* Larger, readable font */
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        button:hover {
-            background-color: #45a049;
-            transform: scale(1.05); /* Subtle hover scaling effect */
-        }
-        .otp-btn {
-            padding: 12px 24px; /* Improved padding */
-            font-size: 16px;
-            background-color: #007BFF;
-            border-radius: 4px;
-        }
-        .otp-btn:hover {
-            background-color: #0056b3;
-        }
-        .otp-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        .required::after {
-            content: " *";
-            color: red;
-        }
-        .hidden {
-            display: none;
-        }
-        @media (max-width: 600px) {
-            .form-group {
-                flex: 1 1 100%;
-            }
-        }
+        /* Variables */
+:root {
+    --primary-blue: #002D62;
+    --golden-yellow: #FFD700;
+    --white: #ffffff;
+    --light-gray: #f7f7f8;
+    --dark-gray: #333;
+}
+
+/* General Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensure full viewport height */
+    margin: 0;
+    padding: 20px; /* Added padding for spacing */
+    box-sizing: border-box; /* Prevent negative margin issues */
+    flex-direction: column;
+}
+
+h1 {
+    font-size: 2rem;
+    color: var(--primary-blue);
+    text-align: center;
+    margin-bottom: 20px; /* Spacing below the heading */
+    margin-top: 0; /* Ensure no unnecessary top margin */
+}
+
+/* Form Styles */
+form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns for grid layout */
+    gap: 12px; /* Spacing between grid items */
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Full-width fields */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.full-width {
+    grid-column: span 2; /* Spans across both columns */
+}
+
+label {
+    font-weight: bold;
+    color: var(--primary-blue);
+    font-size: 0.9rem;
+}
+
+input,
+textarea {
+    padding: 10px;
+    font-size: 0.9rem;
+    border: 1px solid var(--primary-blue);
+    border-radius: 4px;
+    transition: border-color 0.3s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--golden-yellow);
+    outline: none;
+}
+
+textarea {
+    resize: none;
+}
+
+/* Button Styles */
+button,
+.otp-btn {
+    grid-column: span 2; /* Full-width buttons */
+    padding: 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    background-color: var(--golden-yellow);
+    color: var(--primary-blue);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover,
+.otp-btn:hover {
+    background-color: var(--primary-blue);
+    color: var(--golden-yellow);
+    transform: scale(1.03);
+}
+
+.otp-btn.hidden {
+    display: none;
+}
+
+.otp-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Required Field Indicator */
+.required::after {
+    content: " *";
+    color: red;
+}
+
+/* Fix for Negative Space Issues */
+form {
+    margin-top: 0; /* Ensure no unnecessary top margin */
+    margin-bottom: 20px; /* Adds spacing below the form */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    form {
+        grid-template-columns: 1fr; /* Single column layout */
+        gap: 16px; /* Consistent spacing */
+    }
+
+    .form-group {
+        grid-column: span 1; /* Ensures all fields take full width */
+        width: 100%; /* Enforce uniform size */
+    }
+
+    input,
+    textarea {
+        font-size: 1rem;
+        padding: 12px; /* Larger padding for better touch targets */
+    }
+
+    button,
+    .otp-btn {
+        font-size: 1rem;
+        padding: 14px; /* Adjust for mobile */
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+}
+
+
     </style>
 </head>
 <body>
@@ -152,7 +228,9 @@
             <button type="submit">Register</button>
         </div>
     </form>
-
+    <div style="margin-top: 20px; text-align: center;">
+        <p>Already have an account? <a href="/login" style="color: #0366d6; text-decoration: none;">Login</a></p>
+    </div>
     <script>
         let resendDelay = 30; // Initial delay in seconds
         let timer;

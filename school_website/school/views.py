@@ -9,10 +9,10 @@ from random import randint
 import smtplib
 import json
 from datetime import datetime, timedelta
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 # Create your views here.
 def home(request):
-    return render(request,'index.html')
+    return render(request,'index.html',{"user":str(request.user)})
 
 def loginUser(request):
     if request.method == 'POST':
@@ -119,3 +119,7 @@ def otp_api(request):
     else:
         print("Problem sending email")
     return JsonResponse({'message': 'OTP not sent!'}, status=400)
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')

@@ -1,13 +1,329 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Website</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <style>
+        :root {
+            --primary-blue: #002D62;
+            --golden-yellow: #FFD700;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #004080;
+            padding: 15px 20px;
+            color: white;
+            height: 70px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .navbar .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .navbar ul li {
+            margin: 0 20px;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.2em;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #ffd700;
+            transform: scale(1.1);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.8em;
+            cursor: pointer;
+        }
+
+        .menu-close {
+            display: none;
+            font-size: 1.8em;
+            color: white;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 21;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            position: relative;
+            width: 100%;
+            height: 90vh;
+            background: linear-gradient(
+                    to bottom,
+                    rgba(0, 45, 98, 0.8),
+                    rgba(0, 45, 98, 0.9)
+                ),
+                url('https://example.com/school-banner.jpg') no-repeat center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .hero-banner .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 45, 98, 0.4), rgba(0, 45, 98, 0.8));
+            z-index: 1;
+        }
+
+        .hero-banner .content {
+            position: relative;
+            z-index: 2;
+            font-family: 'Poppins', sans-serif;
+            padding: 1rem;
+        }
+
+        .headline {
+            font-size: 3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--golden-yellow);
+            margin-bottom: 1rem;
+            animation: fadeInDown 1.5s ease-in-out;
+        }
+
+        .headline .highlight {
+            color: var(--white);
+        }
+
+        .subtext {
+            font-size: 1.5rem;
+            font-weight: 400;
+            font-family: 'Roboto', sans-serif;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1.5s ease-in-out;
+        }
+
+        .cta-button {
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 0.8rem 2rem;
+            color: var(--primary-blue);
+            background-color: var(--golden-yellow);
+            border-radius: 50px;
+            text-transform: uppercase;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: var(--white);
+            transform: translateY(-5px);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-banner {
+                height: 70vh;
+                background-size: cover;
+            }
+
+            .headline {
+                font-size: 2rem;
+            }
+
+            .subtext {
+                font-size: 1.2rem;
+            }
+
+            .cta-button {
+                font-size: 1rem;
+                padding: 0.6rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-banner {
+                height: 60vh;
+                text-align: center;
+            }
+
+            .headline {
+                font-size: 1.8rem;
+            }
+
+            .subtext {
+                font-size: 1rem;
+            }
+
+            .cta-button {
+                font-size: 0.9rem;
+                padding: 0.5rem 1.2rem;
+            }
+
+            .navbar ul {
+                display: none;
+                flex-direction: column;
+                background: rgba(0, 0, 0, 0.9);
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                padding: 20px 0;
+                transform: translateY(-100%);
+                opacity: 0;
+                z-index: 20;
+            }
+
+            .navbar ul.show {
+                display: flex;
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            .navbar ul li {
+                margin: 20px 0;
+                text-align: center;
+            }
+
+            .navbar ul li a {
+                font-size: 1.8em;
+                padding: 15px 0;
+                display: block;
+                color: #ffffff;
+            }
+
+            .menu-toggle {
+                display: block;
+                z-index: 21;
+            }
+
+            .menu-toggle.hide {
+                display: none;
+            }
+
+            .menu-close {
+                display: block;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Welcome to Our School<img src={% static 'icon.ico' %}></h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <!-- Navbar -->
+    <nav class="navbar">
+    <div class="logo">School Name</div>
+    <span class="menu-toggle">&#9776;</span>
+    <ul>
+        <li><span class="menu-close">&times;</span></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Academics</a></li>
+        {% if user == "AnonymousUser" %}
+            <li><a href="/login">Login</a></li>
+        {% else %}
+            <li>
+                <a href="/dashboard/{{user}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="3"></circle>
+                        <path d="M12 13c-3 0-5 1.5-5 3.5v1.5h10v-1.5c0-2-2-3.5-5-3.5z"></path>
+                    </svg>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+        <div class="overlay"></div>
+        <div class="content">
+            <h1 class="headline">Welcome to <span class="highlight">BlueGold Academy</span></h1>
+            <p class="subtext">Where Education Meets Excellence</p>
+            <a href="#about" class="cta-button">Discover More</a>
+        </div>
+    </section>
+
+    <!-- JavaScript for Menu Toggle -->
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const menuClose = document.querySelector('.menu-close');
+        const navMenu = document.querySelector('.navbar ul');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('show');
+            menuToggle.classList.add('hide');
+        });
+
+        menuClose.addEventListener('click', () => {
+            navMenu.classList.remove('show');
+            menuToggle.classList.remove('hide');
+        });
+    </script>
 </body>
+
 </html>
