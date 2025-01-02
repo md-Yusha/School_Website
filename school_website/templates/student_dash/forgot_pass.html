@@ -169,7 +169,7 @@
             document.querySelectorAll("[id^='otp-group']").forEach(ele => ele.style.display = "block");
             document.getElementById('email-group').style.display = "none";
             document.getElementById('otp_sender').style.display = "none";
-            const action = 'get'; // Set the action value
+            const action = 'forgot'; // Set the action value
             
             try {
                 const response = await fetch('/otp_api/', {

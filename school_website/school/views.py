@@ -99,6 +99,12 @@ def otp_api(request):
     if request.method == "POST":
         data = json.loads(request.body)
         to_email = data.get('email')
+        action = data.get('action')
+        if action == 'forgot':
+            if UserProfile.objects.filter(email=to_email).exists():
+                pass
+            else:
+                return JsonResponse({'message': 'Email not found!'}, status=400)
         my_email = "rishi71213@gmail.com"
         password = ""
         gmail_server = "smtp.gmail.com"
