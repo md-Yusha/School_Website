@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-q6446x^cdex^@cs8a9mjn-juj%u@$6mst8e_-nsh-h@*$0ads&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['d65d-2405-201-d01b-882a-909a-666b-536d-69af.ngrok-free.app','127.0.0.1']
 
 
 # Application definition
@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'school',
+    'fee_manager'
 ]
 
 MIDDLEWARE = [
@@ -127,4 +129,3 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
-

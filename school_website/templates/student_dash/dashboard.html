@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        /* Theme Variables */
+        :root {
+            --primary-blue: #002D62;
+            --golden-yellow: #FFD700;
+            --white: #ffffff;
+            --light-gray: #f7f7f8;
+            --dark-gray: #333;
+        }
+    
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            height: 100vh;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+    
+        .container {
+            max-width: 100%;
+            width: 100%;
+            padding: 20px;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+    
+        h1 {
+            text-align: center;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            font-size: 2rem;
+            width: 100%;
+        }
+    
+        /* Fee Due */
+        .fee-due {
+            text-align: center;
+            background-color: var(--golden-yellow);
+            color: var(--primary-blue);
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+    
+        /* Details Section */
+        .details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 40px;
+        }
+    
+        .details div {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: var(--dark-gray);
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .details div strong {
+            margin-bottom: 5px;
+            color: var(--primary-blue);
+        }
+    
+        /* Transaction Table */
+        .transaction-history {
+            margin-bottom: 30px;
+            width: 100%;
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+    
+        table th, table td {
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    
+        table th {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            font-weight: bold;
+        }
+    
+        /* Payment Button */
+        .pay-button {
+            display: block;
+            margin: 0 auto;
+            padding: 15px 30px;
+            background-color: var(--golden-yellow);
+            color: var(--primary-blue);
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            max-width: 300px;
+            width: 100%;
+        }
+    
+        .pay-button:hover {
+            background-color: var(--primary-blue);
+            color: var(--golden-yellow);
+            transform: scale(1.05);
+        }
+    
+        /* Popup Styling */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--white);
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            z-index: 1000;
+        }
+    
+        .popup h3 {
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+        }
+    
+        .popup input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid var(--primary-blue);
+            border-radius: 4px;
+        }
+    
+        .popup .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+        }
+    
+        .popup button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    
+        .popup .pay-btn {
+            background-color: var(--golden-yellow);
+            color: var(--primary-blue);
+        }
+    
+        .popup .pay-btn:hover {
+            background-color: var(--primary-blue);
+            color: var(--golden-yellow);
+        }
+    
+        .popup .cancel-btn {
+            background-color: #dc3545;
+            color: var(--white);
+        }
+    
+        .popup .cancel-btn:hover {
+            background-color: #c82333;
+        }
+    
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    
+        /* Logout Button */
+        .logout {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+    
+        .logout button {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    
+        .logout button:hover {
+            background-color: #c82333;
+        }
+    
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .details {
+                grid-template-columns: 1fr;
+            }
+    
+            .pay-button {
+                padding: 12px 20px;
+            }
+    
+            .popup input {
+                width: 100%;
+                font-size: 14px;
+            }
+    
+            .popup h3 {
+                font-size: 18px;
+            }
+    
+            .container {
+                padding: 10px;
+            }
+    
+            h1 {
+                font-size: 1.8rem; /* Adjust font size for smaller screens */
+                margin-top: 10px;  /* Add some top margin to prevent negative space */
+            }
+        }
+    
+        @media (max-width: 480px) {
+            .fee-due {
+                font-size: 1rem;
+            }
+    
+            .details {
+                grid-template-columns: 1fr;
+            }
+    
+            .container {
+                padding: 10px;
+                width: 100%;
+            }
+    
+            .pay-button {
+                font-size: 1rem;
+                padding: 12px 20px;
+            }
+    
+            h1 {
+                font-size: 1.6rem; /* Smaller font size on very small screens */
+            }
+        }
+    </style>
+    
+    
+</head>
+<body>
+    <div class="logout">
+        <button onclick="logout()">Logout</button>
+    </div>    
+    <div class="container">
+        <h1>Student Dashboard</h1>
+
+        <!-- Fee Due -->
+        <div class="fee-due">
+            Fee Due: ₹{{ student.fee_due|default:0 }}
+        </div>
+
+        <div class="details">
+            <div>
+                <strong>Username:</strong> {{ student.username }}
+            </div>
+            <div>
+                <strong>Email:</strong> {{ student.email }}
+            </div>
+            <div>
+                <strong>Name:</strong> {{ student.name }}
+            </div>
+            <div>
+                <strong>Father's Name:</strong> {{ student.father_name }}
+            </div>
+            <div>
+                <strong>Class:</strong> {{ student.class }}
+            </div>
+            <div>
+                <strong>Phone Number:</strong> {{ student.phone_number }}
+            </div>
+            <div>
+                <strong>Alternative Phone:</strong> {{ student.alt_number }}
+            </div>
+            <div>
+                <strong>Address:</strong> {{ student.address }}
+            </div>
+        </div>
+        <a class="pay-button" id="renderBtn">Pay Fee</a>
+        <div class="transaction-history">
+            <h2>Transaction History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Transaction Time</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.time }}</td>
+                        <td>₹{{ transaction.amount }}</td>
+                        <td>{{ transaction.status }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No transaction history available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+        <h3>Enter Payment Amount</h3>
+        <h4>Student Name: {{ student.name }}</h4>
+        <h4>User Name: {{ student.username }}</h4>
+        <h4>Fee Due: {{ student.fee_due }}</h4>
+        <input type="text" id="amount" placeholder="Enter amount" />
+        <div class="button-container">
+            <button class="pay-btn" id="payFeeBtn">Confirm</button>
+            <button class="cancel-btn" id="cancelBtn">Cancel</button>
+        </div>
+    </div>
+</body>
+<script>
+    const cashfree = Cashfree({
+        mode: "sandbox"
+    });
+    document.getElementById('renderBtn').addEventListener("click", ()=>{
+        document.getElementById("overlay").style.display = 'block';
+        document.getElementById("popup").style.display = 'block';
+    });
+    document.getElementById('cancelBtn').addEventListener("click", ()=>{
+        document.getElementById("overlay").style.display = 'none';
+        document.getElementById("popup").style.display = 'none';
+    });
+    document.getElementById("payFeeBtn").addEventListener("click", () => {
+        let checkoutOptions = {
+            paymentSessionId: "session_MKW-nnzqc2-QfDPrIqlXAIF3XZGTVtRKUl0i1fzszifdzd8e7Mf0awxKLIw98jguOZo8zhdgBCFxidAigXISZzQmRAx_MDY3RkGZRBiRfi_fRUFsANzAmuQpayment",
+            redirectTarget: "_modal",
+        };
+        cashfree.checkout(checkoutOptions).then((result) => {
+            if(result.error){
+                // This will be true whenever user clicks on close icon inside the modal or any error happens during the payment
+                console.log("User has closed the popup or there is some payment error, Check for Payment Status");
+                console.log(result.error);
+            }
+            if(result.redirect){
+                // This will be true when the payment redirection page couldnt be opened in the same window
+                // This is an exceptional case only when the page is opened inside an inAppBrowser
+                // In this case the customer will be redirected to return url once payment is completed
+                console.log("Payment will be redirected");
+            }
+            if(result.paymentDetails){
+                // This will be called whenever the payment is completed irrespective of transaction status
+                console.log("Payment has been completed, Check for Payment Status");
+                console.log(result.paymentDetails.paymentMessage);
+            }
+        });
+    });
+    function logout() {
+        // Replace with actual logout logic (e.g., clearing session, redirecting to login page)
+        window.location.href = '/logout'; // Redirect to the logout endpoint
+    }
+    
+</script>
+</html>
