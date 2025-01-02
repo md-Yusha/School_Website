@@ -100,14 +100,14 @@ def otp_api(request):
         data = json.loads(request.body)
         to_email = data.get('email')
         my_email = "rishi71213@gmail.com"
-        password = "bowoopqtkinsvbqw"
+        password = ""
         gmail_server = "smtp.gmail.com"
         gmail_port = 587
         my_server = smtplib.SMTP(gmail_server,gmail_port)
         my_server.ehlo()
         my_server.starttls()
         my_server.login(my_email,password)
-        otp = randint(1000,9999)
+        otp = randint(100000,999999)
         request.session['otp'] = otp
         request.session['otp_created_at'] = datetime.now().isoformat()
         request.session.modified = True
@@ -123,3 +123,28 @@ def otp_api(request):
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
+def change_password(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        otp = data.get('otp')
+        email = data.get('email')
+        new_password = data.get('newPassword')
+        if str(otp) != str(request.session['otp']):
+            messages.error(request, 'Invalid OTP. Please try again.')
+            return redirect('change_password')
+        otp_created_time = datetime.fromisoformat(request.session['otp_created_at'])
+        if datetime.now() - otp_created_time > timedelta(minutes=10):
+            del request.session['otp']
+            del request.session['otp_created_at']
+            request.session.modified = True
+            return JsonResponse({"error": "OTP has expired."}, status=400)
+        user = UserProfile.objects.get(email=email).user
+        if user is not None:
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, 'Password changed successfully.')
+            return redirect('login')
+        else:
+            messages.error(request, 'Invalid username or password.')
+    return render(request,'student_dash/forgot_pass.html')

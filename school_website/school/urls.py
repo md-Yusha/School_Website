@@ -6,5 +6,6 @@ urlpatterns = [
     path('logout/',views.logoutUser,name='logout'),
     path('register/',views.registerUser,name='register'),
     path('otp_api/',views.otp_api,name='otp_api'),
+    path('change_password/',views.change_password,name='change_password'),
     path('dashboard/<str:username>/',views.dashboard,name='dashboard'),
 ]
