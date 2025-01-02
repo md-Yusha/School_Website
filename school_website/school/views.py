@@ -117,7 +117,10 @@ def otp_api(request):
         request.session['otp'] = otp
         request.session['otp_created_at'] = datetime.now().isoformat()
         request.session.modified = True
-        m = "Hello, Welcome to School! Your OTP is "+str(otp)+" This OTP is valid for 10 minutes."
+        if action == 'forgot':
+            m = "Your OTP for password change is "+str(otp)+" This OTP is valid for 10 minutes.Don't share this OTP with anyone."
+        else:
+            m = "Hello, Welcome to School! Your OTP is "+str(otp)+" This OTP is valid for 10 minutes.Don't share this OTP with anyone."
         msg1 = MIMEText(m, "plain", "utf-8")
         my_server.sendmail(from_addr=my_email,to_addrs=to_email, msg=msg1.as_string())
         print("Email sent!")
