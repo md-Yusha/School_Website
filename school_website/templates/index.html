@@ -23,46 +23,136 @@
             font-family: 'Roboto', sans-serif;
         }
 
-        /* Navbar */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #004080;
-            padding: 15px 20px;
-            color: white;
-            height: 70px;
-            position: relative;
-            z-index: 10;
+        /* Logo Loading Animation */
+        .logo-container {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background-color:  #002D62;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+          transition: opacity 1s ease;
         }
-
-        .navbar .logo {
-            font-size: 1.8em;
-            font-weight: bold;
+    
+        .logo-container img {
+          width: 450px; /* Initial size of the logo */
+          animation: scaleLogo 3s ease-out forwards;
+          filter: invert(1);
         }
-
-        .navbar ul {
-            list-style: none;
-            display: flex;
-            margin: 0;
-            padding: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+    
+        @keyframes scaleLogo {
+          0% {
+            transform: scale(1);
+          }
+          50% {
+            opacity: 75%;
+            transform: rotate(20deg);
+          }
+          100% {
+            transform: scale(20);
+            opacity: 0;
+          }
         }
-
-        .navbar ul li {
-            margin: 0 20px;
+    
+        /* Navbar Styles */
+        .navbar-toggle {
+          position: fixed;
+          top: 20px;
+          left: 20px;
+          width: 80px;
+          height: 50px;
+          background-color: #004bad00 ;
+          border: none;
+          /* border: 3px solid #fff; */
+          /* border-radius: 50%; */
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 1001;
+          transition: transform 0.3s, background-color 0.3s;
         }
-
-        .navbar ul li a {
-            text-decoration: none;
-            color: white;
-            font-size: 1.2em;
-            transition: color 0.3s ease, transform 0.3s ease;
+    
+        .navbar-toggle:hover {
+          background-color: #0056c000;
+          transform: scale(0.9);
+          
+          .bar {
+            height: 3px;
+            /* width: 40px; */
+            /* margin: 0px; */
+            align-self: self-start;
         }
-
-        .navbar ul li a:hover {
-            color: #ffd700;
-            transform: scale(1.1);
+          .bar2 {
+            height: 3px;
+            /* width: 40px; */
+            align-self: self-end;
+            /* margin: 0px; */
+        }
+        }
+    
+        .navbar-toggle  .bar {
+          width: 50px;
+          height: 3px;
+          background-color: #fff;
+          /* border-radius: 2px; */
+          margin: 3px 0;
+        }
+    
+        .bar2 {
+          width: 50px;
+          height: 3px;
+          background-color: #fff;
+          justify-self: right;
+          /* border-radius: 2px; */
+          margin: 3px 0;
+        }
+        /* Updated Side Navbar for Full Curved Design */
+        .side-navbar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 280px;
+          height: 100vh;
+          background-color: #002D62;
+          color: #fff;
+          border-top-right-radius: 240px;
+          border-bottom-right-radius: 240px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          transform: translateX(-100%);
+          transition: transform 0.4s ease-in-out;
+          z-index: 1000;
+        }
+    
+        .side-navbar.active {
+          transform: translateX(0);
+        }
+    
+        .side-navbar a {
+          color: #fff;
+          text-decoration: none;
+          margin: 20px 0;
+          font-size: 1.2em;
+          transition: color 0.3s ease;
+          cursor: pointer;
+        }
+    
+        .side-navbar a:hover {
+          color: #FFD700;
+        }
+    
+        /* Blur Effect */
+        .blur:not(.side-navbar):not(.navbar-toggle) {
+          filter: blur(4px);
+          pointer-events: none;
         }
 
         .menu-toggle {
@@ -222,58 +312,30 @@
                 padding: 0.5rem 1.2rem;
             }
 
-            .navbar ul {
-                display: none;
-                flex-direction: column;
-                background: rgba(0, 0, 0, 0.9);
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                padding: 20px 0;
-                transform: translateY(-100%);
-                opacity: 0;
-                z-index: 20;
-            }
-
-            .navbar ul.show {
-                display: flex;
-                transform: translateY(0);
-                opacity: 1;
-            }
-
-            .navbar ul li {
-                margin: 20px 0;
-                text-align: center;
-            }
-
-            .navbar ul li a {
-                font-size: 1.8em;
-                padding: 15px 0;
-                display: block;
-                color: #ffffff;
-            }
-
-            .menu-toggle {
-                display: block;
-                z-index: 21;
-            }
-
-            .menu-toggle.hide {
-                display: none;
-            }
-
-            .menu-close {
-                display: block;
-            }
         }
     </style>
 </head>
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar">
+    <div class="logo-container" id="logo-container">
+        <img src="logo.png" alt="Logo" id="logo">
+      </div>
+
+    <button class="navbar-toggle" aria-label="Toggle navigation">
+        <span class="bar"></span>
+        <span class="bar2"></span>
+      </button>
+    
+      <!-- Side Navbar -->
+      <div class="side-navbar">
+        <a data-target="home">Home</a>
+        <a data-target="about">About</a>
+        <a data-target="Contact Us">Contact Us</a>
+        <a data-target="Academics">Academics</a>
+        <a data-target="Login">Login/Sign up</a>
+      </div>
+    {% comment %} <nav class="navbar">
     <div class="logo">School Name</div>
     <span class="menu-toggle">&#9776;</span>
     <ul>
@@ -295,7 +357,7 @@
             </li>
         {% endif %}
     </ul>
-</nav>
+</nav> {% endcomment %}
 
 
     <!-- Hero Banner -->
@@ -310,7 +372,7 @@
 
     <!-- JavaScript for Menu Toggle -->
     <script>
-        const menuToggle = document.querySelector('.menu-toggle');
+        {% comment %} const menuToggle = document.querySelector('.menu-toggle');
         const menuClose = document.querySelector('.menu-close');
         const navMenu = document.querySelector('.navbar ul');
 
@@ -322,7 +384,52 @@
         menuClose.addEventListener('click', () => {
             navMenu.classList.remove('show');
             menuToggle.classList.remove('hide');
-        });
+        }); {% endcomment %}
+
+    const toggleButton = document.querySelector('.navbar-toggle');
+    const sideNavbar = document.querySelector('.side-navbar');
+    const links = document.querySelectorAll('.side-navbar a');
+    const sections = document.querySelectorAll('section');
+    const body = document.body;
+    const logoContainer = document.getElementById('logo-container');
+    const logo = document.getElementById('logo');
+
+    // Toggle Navbar and Blur Effect
+    toggleButton.addEventListener('click', () => {
+      sideNavbar.classList.toggle('active');
+      // Toggle blur effect on sections and footer
+      if (sideNavbar.classList.contains('active')) {
+        document.querySelectorAll('section, .footer').forEach(el => el.classList.add('blur'));
+      } else {
+        document.querySelectorAll('section, .footer').forEach(el => el.classList.remove('blur'));
+      }
+    });
+
+    // Handle Navbar Button Clicks
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        // Hide all sections
+        sections.forEach(section => section.classList.remove('active'));
+
+        // Show the clicked section
+        const target = document.getElementById(link.dataset.target);
+        target.classList.add('active');
+
+        // Close the navbar
+        sideNavbar.classList.remove('active');
+        
+        // Remove blur effect
+        document.querySelectorAll('section, .footer').forEach(el => el.classList.remove('blur'));
+      });
+    });
+
+    // Logo Animation - Hide after 3 seconds
+    window.onload = () => {
+      setTimeout(() => {
+        logoContainer.style.opacity = '0';
+        logoContainer.style.visibility = 'hidden'; // Hide logo after animation
+      }, 3000); // After 3 seconds, hide the logo and show the landing page
+    };
     </script>
 </body>
 
