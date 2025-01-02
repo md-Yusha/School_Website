@@ -10,6 +10,13 @@ import smtplib
 import json
 from datetime import datetime, timedelta
 from django.contrib.auth import authenticate,login,logout
+from cashfree_pg.models.create_order_request import CreateOrderRequest
+from cashfree_pg.api_client import Cashfree
+from cashfree_pg.models.customer_details import CustomerDetails
+from cashfree_pg.models.order_meta import OrderMeta
+from urllib3.exceptions import InsecureRequestWarning
+import warnings
+warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 # Create your views here.
 def home(request):
     return render(request,'index.html',{"user":str(request.user)})
@@ -157,3 +164,79 @@ def change_password(request):
         else:
             messages.error(request, 'Invalid username or password.')
     return render(request,'student_dash/forgot_pass.html')
+
+def serialize_order_entity(order_entity):
+    return {
+    "cart_details": "",
+    "cf_order_id": order_entity.order_id,
+    "created_at": order_entity.created_at,
+    "customer_details": {
+        "customer_id": order_entity.customer_details.customer_id,    
+        "customer_name": order_entity.customer_details.customer_name,
+        "customer_email": "",
+        "customer_phone": order_entity.customer_details.customer_phone,
+        "customer_uid": ""
+    },
+    "entity": order_entity.entity,
+    "order_amount": order_entity.order_amount,
+    "order_currency": order_entity.order_currency,
+    "order_expiry_time": order_entity.order_expiry_time,
+    "order_id": order_entity.order_id,  
+    "order_meta": {
+        "return_url": order_entity.order_meta.return_url,
+        "notify_url": order_entity.order_meta.notify_url,
+        "payment_methods": order_entity.order_meta.payment_methods
+    },
+    "order_note": "",
+    "order_splits": [],
+    "order_status": order_entity.order_status,
+    "order_tags": "",
+    "payment_session_id": order_entity.payment_session_id,
+    "terminal_data": ""
+}
+
+
+def create_order(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        amount = data.get('amount')
+
+        Cashfree.XClientId = "TEST430329ae80e0f32e41a393d78b923034"
+        Cashfree.XClientSecret = "TESTaf195616268bd6202eeb3bf8dc458956e7192a85"
+        Cashfree.XEnvironment = Cashfree.SANDBOX
+        x_api_version = "2023-08-01"
+
+        customerDetails = CustomerDetails(customer_id=str(request.user), customer_phone="9999999999")    
+        customerDetails.customer_name = UserProfile.objects.get(user=request.user).Name 
+        customerDetails.customer_email = UserProfile.objects.get(user=request.user).email
+        order_id = str(request.user)+str(datetime.now()).replace(" ","").replace(":","").replace(".","")
+        createOrderRequest = CreateOrderRequest(order_id=order_id, order_amount=float(amount), order_currency="INR", customer_details=customerDetails)
+        orderMeta = OrderMeta()
+        orderMeta.return_url = "https://www.cashfree.com/devstudio/preview/pg/web/popupCheckout?order_id={order_id}";
+        orderMeta.notify_url = "https://www.cashfree.com/devstudio/preview/pg/webhooks/8020517";
+        orderMeta.payment_methods = "cc,dc,upi";
+        createOrderRequest.order_meta = orderMeta;
+
+        try:
+            api_response = Cashfree().PGCreateOrder(x_api_version, createOrderRequest, None, None)
+            #print(api_response.data)
+            return JsonResponse(serialize_order_entity(api_response.data), status=201)
+        except Exception as e:
+            print(e)
+        return JsonResponse({"error": "Error creating order."}, status=400)
+    
+def verify_payment(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        order_id = data.get('order_id')
+        Cashfree.XClientId = "TEST430329ae80e0f32e41a393d78b923034"
+        Cashfree.XClientSecret = "TESTaf195616268bd6202eeb3bf8dc458956e7192a85"
+        Cashfree.XEnvironment = Cashfree.SANDBOX
+        x_api_version = "2023-08-01"
+        try:
+            api_response = Cashfree().PGOrderFetchPayments(x_api_version, str(order_id), None)
+            print(api_response.data)
+            #return JsonResponse(api_response.data, status=200,safe=False)
+        except Exception as e:
+            print(e)
+        return JsonResponse({"error": "Error fetching order status."}, status=400)
