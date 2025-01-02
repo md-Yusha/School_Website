@@ -22,7 +22,6 @@
             margin: 0;
             font-family: 'Roboto', sans-serif;
         }
-
         /* Logo Loading Animation */
         .logo-container {
           position: fixed;
@@ -313,20 +312,57 @@
             }
 
         }
+        /* Login Button */
+.login-button {
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.login-btn {
+    padding: 8px 16px;
+    font-size: 1rem;
+    color: var(--primary-blue);
+    background-color: var(--golden-yellow);
+    border: none;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    font-family: 'Roboto', sans-serif;
+}
+
+.login-btn:hover {
+    background-color: var(--white);
+    color: var(--primary-blue);
+    transform: scale(1.05);
+}
+
     </style>
 </head>
 
 <body>
     <!-- Navbar -->
+    
     <div class="logo-container" id="logo-container">
         <img src="logo.png" alt="Logo" id="logo">
       </div>
 
-    <button class="navbar-toggle" aria-label="Toggle navigation">
-        <span class="bar"></span>
-        <span class="bar2"></span>
-      </button>
-    
+      
+
+      <div class="navbar">
+        <button class="navbar-toggle" aria-label="Toggle navigation">
+            <span class="bar"></span>
+            <span class="bar2"></span>
+        </button>
+        <div class="login-button">
+            {% if user == "AnonymousUser" %}
+            <a href="/login" class="login-btn">Login</a>
+            {% else %}
+            <a href="/dashboard/{{user}}" class="login-btn">Dashboard</a>
+            {% endif %}
+        </div>
+    </div>
       <!-- Side Navbar -->
       <div class="side-navbar">
         <a data-target="home">Home</a>
@@ -372,19 +408,6 @@
 
     <!-- JavaScript for Menu Toggle -->
     <script>
-        {% comment %} const menuToggle = document.querySelector('.menu-toggle');
-        const menuClose = document.querySelector('.menu-close');
-        const navMenu = document.querySelector('.navbar ul');
-
-        menuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('show');
-            menuToggle.classList.add('hide');
-        });
-
-        menuClose.addEventListener('click', () => {
-            navMenu.classList.remove('show');
-            menuToggle.classList.remove('hide');
-        }); {% endcomment %}
 
     const toggleButton = document.querySelector('.navbar-toggle');
     const sideNavbar = document.querySelector('.side-navbar');
