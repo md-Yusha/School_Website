@@ -167,15 +167,15 @@ def change_password(request):
 
 def serialize_order_entity(order_entity):
     return {
-    "cart_details": "",
+    "cart_details": order_entity.cart_details,
     "cf_order_id": order_entity.order_id,
     "created_at": order_entity.created_at,
     "customer_details": {
         "customer_id": order_entity.customer_details.customer_id,    
         "customer_name": order_entity.customer_details.customer_name,
-        "customer_email": "",
+        "customer_email": order_entity.customer_details.customer_email,
         "customer_phone": order_entity.customer_details.customer_phone,
-        "customer_uid": ""
+        "customer_uid": order_entity.customer_details.customer_uid
     },
     "entity": order_entity.entity,
     "order_amount": order_entity.order_amount,
@@ -187,13 +187,54 @@ def serialize_order_entity(order_entity):
         "notify_url": order_entity.order_meta.notify_url,
         "payment_methods": order_entity.order_meta.payment_methods
     },
-    "order_note": "",
-    "order_splits": [],
+    "order_note": order_entity.order_note,
+    "order_splits": order_entity.order_splits,
     "order_status": order_entity.order_status,
-    "order_tags": "",
+    "order_tags": order_entity.order_tags,
     "payment_session_id": order_entity.payment_session_id,
-    "terminal_data": ""
+    "terminal_data": "",
 }
+
+def serialize_payment_method(payment_method):
+    return {
+        "oneof_schema_1_validator": payment_method.oneof_schema_1_validator,
+        "oneof_schema_2_validator": payment_method.oneof_schema_2_validator,
+        "oneof_schema_3_validator": payment_method.oneof_schema_3_validator,
+        "oneof_schema_4_validator": payment_method.oneof_schema_4_validator,
+        "oneof_schema_5_validator": payment_method.oneof_schema_5_validator,
+        "oneof_schema_6_validator": payment_method.oneof_schema_6_validator,
+        "oneof_schema_7_validator": payment_method.oneof_schema_7_validator,
+        "oneof_schema_8_validator": payment_method.oneof_schema_8_validator,
+        "actual_instance": {
+            "upi": {
+                "channel": payment_method.actual_instance.upi.channel,
+                "upi_id": payment_method.actual_instance.upi.upi_id
+            }
+        },
+        "one_of_schemas": payment_method.one_of_schemas,
+    }
+
+def serialize_payment_entity(payment_entity):
+    return {
+        "cf_payment_id": payment_entity.cf_payment_id,
+        "order_id": payment_entity.order_id,
+        "entity": payment_entity.entity,
+        "error_details": payment_entity.error_details,
+        "is_captured": payment_entity.is_captured,
+        "order_amount": payment_entity.order_amount,
+        "payment_group": payment_entity.payment_group,
+        "payment_currency": payment_entity.payment_currency,
+        "payment_amount": payment_entity.payment_amount,
+        "payment_time": payment_entity.payment_time,
+        "payment_completion_time": payment_entity.payment_completion_time,
+        "payment_status": payment_entity.payment_status,
+        "payment_message": payment_entity.payment_message,
+        "bank_reference": payment_entity.bank_reference,
+        "auth_id": payment_entity.auth_id,
+        "authorization": payment_entity.authorization,
+        "payment_method": serialize_payment_method(payment_entity.payment_method),
+    }
+
 
 
 def create_order(request):
@@ -235,8 +276,10 @@ def verify_payment(request):
         x_api_version = "2023-08-01"
         try:
             api_response = Cashfree().PGOrderFetchPayments(x_api_version, str(order_id), None)
-            print(api_response.data)
-            #return JsonResponse(api_response.data, status=200,safe=False)
+            res = serialize_payment_entity(api_response.data[0])
+            if res['payment_status'] == 'SUCCESS':
+                UserProfile.objects.filter(user=request.user).update(Fee_Due=UserProfile.objects.get(user=request.user).Fee_Due - res['payment_amount'])
+            return JsonResponse(res, status=200)
         except Exception as e:
             print(e)
         return JsonResponse({"error": "Error fetching order status."}, status=400)
