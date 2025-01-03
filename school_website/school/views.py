@@ -10,6 +10,13 @@ import smtplib
 import json
 from datetime import datetime, timedelta
 from django.contrib.auth import authenticate,login,logout
+from cashfree_pg.models.create_order_request import CreateOrderRequest
+from cashfree_pg.api_client import Cashfree
+from cashfree_pg.models.customer_details import CustomerDetails
+from cashfree_pg.models.order_meta import OrderMeta
+from urllib3.exceptions import InsecureRequestWarning
+import warnings
+warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 # Create your views here.
 def home(request):
     return render(request,'index.html',{"user":str(request.user)})
@@ -99,19 +106,28 @@ def otp_api(request):
     if request.method == "POST":
         data = json.loads(request.body)
         to_email = data.get('email')
+        action = data.get('action')
+        if action == 'forgot':
+            if UserProfile.objects.filter(email=to_email).exists():
+                pass
+            else:
+                return JsonResponse({'message': 'Email not found!'}, status=400)
         my_email = "rishi71213@gmail.com"
-        password = "bowoopqtkinsvbqw"
+        password = ""
         gmail_server = "smtp.gmail.com"
         gmail_port = 587
         my_server = smtplib.SMTP(gmail_server,gmail_port)
         my_server.ehlo()
         my_server.starttls()
         my_server.login(my_email,password)
-        otp = randint(1000,9999)
+        otp = randint(100000,999999)
         request.session['otp'] = otp
         request.session['otp_created_at'] = datetime.now().isoformat()
         request.session.modified = True
-        m = "Hello, Welcome to School! Your OTP is "+str(otp)+" This OTP is valid for 10 minutes."
+        if action == 'forgot':
+            m = "Your OTP for password change is "+str(otp)+" This OTP is valid for 10 minutes.Don't share this OTP with anyone."
+        else:
+            m = "Hello, Welcome to School! Your OTP is "+str(otp)+" This OTP is valid for 10 minutes.Don't share this OTP with anyone."
         msg1 = MIMEText(m, "plain", "utf-8")
         my_server.sendmail(from_addr=my_email,to_addrs=to_email, msg=msg1.as_string())
         print("Email sent!")
@@ -123,3 +139,147 @@ def otp_api(request):
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
+def change_password(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        otp = data.get('otp')
+        email = data.get('email')
+        new_password = data.get('newPassword')
+        if str(otp) != str(request.session['otp']):
+            messages.error(request, 'Invalid OTP. Please try again.')
+            return redirect('change_password')
+        otp_created_time = datetime.fromisoformat(request.session['otp_created_at'])
+        if datetime.now() - otp_created_time > timedelta(minutes=10):
+            del request.session['otp']
+            del request.session['otp_created_at']
+            request.session.modified = True
+            return JsonResponse({"error": "OTP has expired."}, status=400)
+        user = UserProfile.objects.get(email=email).user
+        if user is not None:
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, 'Password changed successfully.')
+            return redirect('login')
+        else:
+            messages.error(request, 'Invalid username or password.')
+    return render(request,'student_dash/forgot_pass.html')
+
+def serialize_order_entity(order_entity):
+    return {
+    "cart_details": order_entity.cart_details,
+    "cf_order_id": order_entity.order_id,
+    "created_at": order_entity.created_at,
+    "customer_details": {
+        "customer_id": order_entity.customer_details.customer_id,    
+        "customer_name": order_entity.customer_details.customer_name,
+        "customer_email": order_entity.customer_details.customer_email,
+        "customer_phone": order_entity.customer_details.customer_phone,
+        "customer_uid": order_entity.customer_details.customer_uid
+    },
+    "entity": order_entity.entity,
+    "order_amount": order_entity.order_amount,
+    "order_currency": order_entity.order_currency,
+    "order_expiry_time": order_entity.order_expiry_time,
+    "order_id": order_entity.order_id,  
+    "order_meta": {
+        "return_url": order_entity.order_meta.return_url,
+        "notify_url": order_entity.order_meta.notify_url,
+        "payment_methods": order_entity.order_meta.payment_methods
+    },
+    "order_note": order_entity.order_note,
+    "order_splits": order_entity.order_splits,
+    "order_status": order_entity.order_status,
+    "order_tags": order_entity.order_tags,
+    "payment_session_id": order_entity.payment_session_id,
+    "terminal_data": "",
+}
+
+def serialize_payment_method(payment_method):
+    return {
+        "oneof_schema_1_validator": payment_method.oneof_schema_1_validator,
+        "oneof_schema_2_validator": payment_method.oneof_schema_2_validator,
+        "oneof_schema_3_validator": payment_method.oneof_schema_3_validator,
+        "oneof_schema_4_validator": payment_method.oneof_schema_4_validator,
+        "oneof_schema_5_validator": payment_method.oneof_schema_5_validator,
+        "oneof_schema_6_validator": payment_method.oneof_schema_6_validator,
+        "oneof_schema_7_validator": payment_method.oneof_schema_7_validator,
+        "oneof_schema_8_validator": payment_method.oneof_schema_8_validator,
+        "actual_instance": {
+            "upi": {
+                "channel": payment_method.actual_instance.upi.channel,
+                "upi_id": payment_method.actual_instance.upi.upi_id
+            }
+        },
+        "one_of_schemas": payment_method.one_of_schemas,
+    }
+
+def serialize_payment_entity(payment_entity):
+    return {
+        "cf_payment_id": payment_entity.cf_payment_id,
+        "order_id": payment_entity.order_id,
+        "entity": payment_entity.entity,
+        "error_details": payment_entity.error_details,
+        "is_captured": payment_entity.is_captured,
+        "order_amount": payment_entity.order_amount,
+        "payment_group": payment_entity.payment_group,
+        "payment_currency": payment_entity.payment_currency,
+        "payment_amount": payment_entity.payment_amount,
+        "payment_time": payment_entity.payment_time,
+        "payment_completion_time": payment_entity.payment_completion_time,
+        "payment_status": payment_entity.payment_status,
+        "payment_message": payment_entity.payment_message,
+        "bank_reference": payment_entity.bank_reference,
+        "auth_id": payment_entity.auth_id,
+        "authorization": payment_entity.authorization,
+        "payment_method": serialize_payment_method(payment_entity.payment_method),
+    }
+
+
+
+def create_order(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        amount = data.get('amount')
+
+        Cashfree.XClientId = "TEST430329ae80e0f32e41a393d78b923034"
+        Cashfree.XClientSecret = "TESTaf195616268bd6202eeb3bf8dc458956e7192a85"
+        Cashfree.XEnvironment = Cashfree.SANDBOX
+        x_api_version = "2023-08-01"
+
+        customerDetails = CustomerDetails(customer_id=str(request.user), customer_phone="9999999999")    
+        customerDetails.customer_name = UserProfile.objects.get(user=request.user).Name 
+        customerDetails.customer_email = UserProfile.objects.get(user=request.user).email
+        order_id = str(request.user)+str(datetime.now()).replace(" ","").replace(":","").replace(".","")
+        createOrderRequest = CreateOrderRequest(order_id=order_id, order_amount=float(amount), order_currency="INR", customer_details=customerDetails)
+        orderMeta = OrderMeta()
+        orderMeta.return_url = "https://www.cashfree.com/devstudio/preview/pg/web/popupCheckout?order_id={order_id}";
+        orderMeta.notify_url = "https://www.cashfree.com/devstudio/preview/pg/webhooks/8020517";
+        orderMeta.payment_methods = "cc,dc,upi";
+        createOrderRequest.order_meta = orderMeta;
+
+        try:
+            api_response = Cashfree().PGCreateOrder(x_api_version, createOrderRequest, None, None)
+            #print(api_response.data)
+            return JsonResponse(serialize_order_entity(api_response.data), status=201)
+        except Exception as e:
+            print(e)
+        return JsonResponse({"error": "Error creating order."}, status=400)
+    
+def verify_payment(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        order_id = data.get('order_id')
+        Cashfree.XClientId = "TEST430329ae80e0f32e41a393d78b923034"
+        Cashfree.XClientSecret = "TESTaf195616268bd6202eeb3bf8dc458956e7192a85"
+        Cashfree.XEnvironment = Cashfree.SANDBOX
+        x_api_version = "2023-08-01"
+        try:
+            api_response = Cashfree().PGOrderFetchPayments(x_api_version, str(order_id), None)
+            res = serialize_payment_entity(api_response.data[0])
+            if res['payment_status'] == 'SUCCESS':
+                UserProfile.objects.filter(user=request.user).update(Fee_Due=UserProfile.objects.get(user=request.user).Fee_Due - res['payment_amount'])
+            return JsonResponse(res, status=200)
+        except Exception as e:
+            print(e)
+        return JsonResponse({"error": "Error fetching order status."}, status=400)
