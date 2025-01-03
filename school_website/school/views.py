@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
-from .models import UserProfile
+from .models import UserProfile,Transactions
 from email.mime.text import MIMEText
 from random import randint
 import smtplib
@@ -101,7 +101,8 @@ def dashboard(request,username):
         'address': UserProfile.objects.get(user=request.user).address,
         'fee_due': UserProfile.objects.get(user=request.user).Fee_Due,
     }
-    return render(request,'student_dash/dashboard.html',{"student":user_data})
+    transactions = Transactions.objects.filter(user=request.user).order_by('-date')
+    return render(request,'student_dash/dashboard.html',{"student":user_data,'transactions': transactions})
 def otp_api(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -253,10 +254,10 @@ def create_order(request):
         order_id = str(request.user)+str(datetime.now()).replace(" ","").replace(":","").replace(".","")
         createOrderRequest = CreateOrderRequest(order_id=order_id, order_amount=float(amount), order_currency="INR", customer_details=customerDetails)
         orderMeta = OrderMeta()
-        orderMeta.return_url = "https://www.cashfree.com/devstudio/preview/pg/web/popupCheckout?order_id={order_id}";
-        orderMeta.notify_url = "https://www.cashfree.com/devstudio/preview/pg/webhooks/8020517";
-        orderMeta.payment_methods = "cc,dc,upi";
-        createOrderRequest.order_meta = orderMeta;
+        orderMeta.return_url = "https://www.cashfree.com/devstudio/preview/pg/web/popupCheckout?order_id={order_id}"
+        orderMeta.notify_url = "https://www.cashfree.com/devstudio/preview/pg/webhooks/8020517"
+        orderMeta.payment_methods = "cc,dc,upi"
+        createOrderRequest.order_meta = orderMeta
 
         try:
             api_response = Cashfree().PGCreateOrder(x_api_version, createOrderRequest, None, None)
@@ -277,6 +278,14 @@ def verify_payment(request):
         try:
             api_response = Cashfree().PGOrderFetchPayments(x_api_version, str(order_id), None)
             res = serialize_payment_entity(api_response.data[0])
+            Transactions.objects.create(
+            user=request.user,
+            amount=res['payment_amount'],
+            transaction_id=res['cf_payment_id'],
+            status=True if res['payment_status'] == 'SUCCESS' else False,
+            payment_mode = "Online-"+str(list(res['payment_method']['actual_instance'].keys())[0]),
+            date = res['payment_time']
+            )
             if res['payment_status'] == 'SUCCESS':
                 UserProfile.objects.filter(user=request.user).update(Fee_Due=UserProfile.objects.get(user=request.user).Fee_Due - res['payment_amount'])
             return JsonResponse(res, status=200)

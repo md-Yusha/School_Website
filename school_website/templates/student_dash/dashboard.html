@@ -333,17 +333,26 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Transaction Time</th>
+                        <th>Transaction Date</th>
                         <th>Amount</th>
+                        <th>Transaction_id</th>
                         <th>Status</th>
+                        <th>Payment Mode</th>
+                        <th>Dowload Receipt</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for transaction in transactions %}
                     <tr>
-                        <td>{{ transaction.time }}</td>
+                        <td>{{ transaction.date }}</td>
                         <td>₹{{ transaction.amount }}</td>
-                        <td>{{ transaction.status }}</td>
+                        <td>{{ transaction.transaction_id }}</td>
+                        {% if transaction.status == False %}
+                        <td>❌</td>
+                        {% else %}
+                        <td>✅</td>
+                        {% endif %}
+                        <td>{{ transaction.payment_mode }}</td>
                     </tr>
                     {% empty %}
                     <tr>
