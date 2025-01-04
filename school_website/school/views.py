@@ -16,6 +16,7 @@ from cashfree_pg.models.customer_details import CustomerDetails
 from cashfree_pg.models.order_meta import OrderMeta
 from urllib3.exceptions import InsecureRequestWarning
 import warnings
+from django.db.models import F
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 # Create your views here.
 def home(request):
@@ -88,20 +89,23 @@ def registerUser(request):
 
 
 def dashboard(request,username):
-    if str(request.user) != username:
-        return redirect('login')
+    if request.user.is_superuser==False:
+        if str(request.user) != username:
+            return redirect('login')
+    user = User.objects.get(username=username)
+    user_profile = UserProfile.objects.get(user=user)
     user_data = {
-        'username': request.user,
-        'email': UserProfile.objects.get(user=request.user).email,
-        'name': UserProfile.objects.get(user=request.user).Name,
-        'class': UserProfile.objects.get(user=request.user).Class,
-        'father_name': UserProfile.objects.get(user=request.user).Father_name,
-        'phone_number': UserProfile.objects.get(user=request.user).phone_number,
-        'alt_number': UserProfile.objects.get(user=request.user).alt_number,
-        'address': UserProfile.objects.get(user=request.user).address,
-        'fee_due': UserProfile.objects.get(user=request.user).Fee_Due,
+        'username': user.username,
+        'email': user_profile.email,
+        'name': user_profile.Name,
+        'class': user_profile.Class,
+        'father_name': user_profile.Father_name,
+        'phone_number': user_profile.phone_number,
+        'alt_number': user_profile.alt_number,
+        'address': user_profile.address,
+        'fee_due': user_profile.Fee_Due,
     }
-    transactions = Transactions.objects.filter(user=request.user).order_by('-date')
+    transactions = Transactions.objects.filter(user=user).order_by('-date')
     return render(request,'student_dash/dashboard.html',{"student":user_data,'transactions': transactions})
 def otp_api(request):
     if request.method == "POST":
@@ -278,6 +282,7 @@ def verify_payment(request):
         try:
             api_response = Cashfree().PGOrderFetchPayments(x_api_version, str(order_id), None)
             res = serialize_payment_entity(api_response.data[0])
+            print(res)
             Transactions.objects.create(
             user=request.user,
             amount=res['payment_amount'],
@@ -292,3 +297,15 @@ def verify_payment(request):
         except Exception as e:
             print(e)
         return JsonResponse({"error": "Error fetching order status."}, status=400)
+    
+
+def update_fee(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        amount = data.get('fee')
+        users = data.get('queryset')
+        for user in users:
+            UserProfile.objects.filter(user=User.objects.get(username=user)).update(Fee_Due=F("Fee_Due")+amount)
+        messages.success(request, 'Fee updated successfully.')
+        return JsonResponse({"message": "Fee updated successfully."}, status=200)
+    return JsonResponse({"error": "Error updating fee."}, status=400)

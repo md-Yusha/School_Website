@@ -1,0 +1,42 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <h1>Set Fee Due for selected users</h1>
+
+  <form>
+    <label for="fee">Fee Due:</label>
+    <input type="number" name="fee" id="fee" required>
+    <button type="button" name="apply" onclick="updateFee()">Apply Fee</button>
+  </form>
+
+  <h3>Selected Users:</h3>
+  <ul>
+    {% for user in users %}
+      <li>{{ user }}</li>
+    {% endfor %}
+  </ul>
+  <script>
+    const queryset = [];
+    {% for user in users %}
+      queryset.push("{{ user | escapejs }}");
+      console.log(queryset);
+    {% endfor %}
+    async function updateFee(){
+        const fee = document.getElementById('fee').value;
+        const response = await fetch('/update_fee/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({fee, queryset}),
+        });
+        const data = await response.json();
+        alert(data.message);
+        if (response.ok) {
+          window.location.href = '/admin/';
+        }
+    }
+</script>
+
+{% endblock %}

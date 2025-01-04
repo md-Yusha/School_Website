@@ -131,6 +131,6 @@ STATICFILES_DIRS = [
 ]
 
 #CSRF_TRUSTED_ORIGINS = [
-#    'https://b16c-2409-40f2-19-7068-28d4-6bac-fafa-74fa.ngrok-free.app',  # Replace with your ngrok URL
+#    'https://bfb4-2405-201-d01b-882a-9d5a-4b0d-cf91-da93.ngrok-free.app',  # Replace with your ngrok URL
 #]
 

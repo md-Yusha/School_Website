@@ -9,5 +9,6 @@ urlpatterns = [
     path('change_password/',views.change_password,name='change_password'),
     path('create_order/',views.create_order,name='create_order'),
     path('verify_payment/',views.verify_payment,name='verify_payment'),
+    path('update_fee/',views.update_fee,name='update_fee'),
     path('dashboard/<str:username>/',views.dashboard,name='dashboard'),
 ]
