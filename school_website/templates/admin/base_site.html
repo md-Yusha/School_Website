@@ -1,0 +1,148 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}My Grappelli Admin{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+  /* Custom Grappelli Theme: Yellow and Blue */
+
+  /* Body and Background */
+  body {
+    font-family: "Roboto", sans-serif;
+    background-color: #f4f6f9; /* Softer light background */
+    color: #333; /* Default text color */
+    font-size: 16px; /* Larger base font size */
+    line-height: 1.6; /* Improved readability */
+  }
+
+  /* Header and Branding */
+  #header {
+    background-color: #ffcc00; /* IKEA Yellow */
+    border-bottom: 4px solid #0058a3; /* IKEA Blue */
+  }
+
+  #branding h1 {
+    color: #0058a3;
+    font-size: 2.2rem; /* Bigger font size */
+    font-weight: bold;
+    padding: 15px 0;
+    text-transform: uppercase; /* All caps for emphasis */
+    letter-spacing: 1px; /* Better spacing for text */
+  }
+
+  /* Sidebar Navigation */
+  #nav-sidebar {
+    background-color: #0058a3;
+    color: #fff;
+  }
+
+  #nav-sidebar ul li a {
+    color: #fff;
+    font-size: 1.2rem; /* Larger font size */
+    font-weight: bold;
+  }
+
+  #nav-sidebar ul li a:hover,
+  #nav-sidebar ul li a:focus {
+    background-color: #ffcc00;
+    color: #0058a3;
+    text-decoration: underline; /* Highlight hover state */
+  }
+
+  /* Buttons */
+  button,
+  input[type="submit"] {
+    background-color: #0058a3;
+    color: #fff;
+    border: none;
+    padding: 12px 20px; /* Bigger button */
+    border-radius: 6px; /* Rounded corners */
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  button:hover,
+  input[type="submit"]:hover {
+    background-color: #ffcc00;
+    color: #0058a3;
+    transform: scale(1.05); /* Slight zoom on hover */
+  }
+
+  /* Table Headers */
+  table th {
+    background-color: #ffcc00;
+    color: #0058a3;
+    font-size: 1.2rem; /* Larger table header font size */
+    text-align: center;
+    padding: 10px 15px;
+  }
+
+  table td {
+    font-size: 1.1rem; /* Slightly bigger text for table data */
+    padding: 10px;
+  }
+
+  /* Links */
+  a {
+    color: #0058a3;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  a:hover,
+  a:focus {
+    color: #ffcc00;
+    text-decoration: underline;
+  }
+
+  /* Footer */
+  #footer-custom {
+    background-color: #f7f8fa;
+    padding: 20px 0; /* More padding for a clean look */
+    font-size: 1rem; /* Bigger footer font size */
+  }
+
+  #footer-custom p {
+    color: #0058a3;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  /* Forms */
+  form input,
+  form select {
+    border: 2px solid #0058a3;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 1rem; /* Larger form input text */
+  }
+
+  form input:focus,
+  form select:focus {
+    outline: none;
+    border-color: #ffcc00;
+    box-shadow: 0 0 10px #ffcc00;
+  }
+</style>
+{% endblock %}
+
+{% block branding %}
+<div id="branding">
+  <h1 style="color: #0058a3; font-family: 'Roboto', sans-serif;">My Grappelli Admin</h1>
+</div>
+{% endblock %}
+
+{% block nav-global %}
+<div id="nav-global">
+  {{ block.super }}
+</div>
+{% endblock %}
+
+{% block footer %}
+<div id="footer-custom">
+  <p>Powered by Django | Custom Admin Theme</p>
+</div>
+{% endblock %}

@@ -4,6 +4,10 @@ from .models import UserProfile, Transactions
 from django.contrib.admin import SimpleListFilter
 from django.contrib import messages
 
+admin.site.site_header = "School Admin"
+admin.site.site_title = "Admin Portal"
+admin.site.index_title = "Welcome to the School Admin"
+
 class AmountRangeFilter(SimpleListFilter):
     title = 'Amount Range'
     parameter_name = 'amount_range'
