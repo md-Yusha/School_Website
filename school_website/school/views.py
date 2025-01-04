@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
@@ -17,6 +17,8 @@ from cashfree_pg.models.order_meta import OrderMeta
 from urllib3.exceptions import InsecureRequestWarning
 import warnings
 from django.db.models import F
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 # Create your views here.
 def home(request):
@@ -309,3 +311,23 @@ def update_fee(request):
         messages.success(request, 'Fee updated successfully.')
         return JsonResponse({"message": "Fee updated successfully."}, status=200)
     return JsonResponse({"error": "Error updating fee."}, status=400)
+
+def download_receipt(request, transaction_id):
+    # Fetch transaction details from the database
+    transaction = get_object_or_404(Transactions, transaction_id=transaction_id)
+
+    # Create PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="receipt_{transaction_id}.pdf"'
+
+    # Generate PDF using ReportLab or another library
+    p = canvas.Canvas(response)
+    p.drawString(100, 800, f"Receipt for Transaction ID: {transaction.transaction_id}")
+    p.drawString(100, 780, f"Date: {transaction.date}")
+    p.drawString(100, 760, f"Amount: ₹{transaction.amount}")
+    p.drawString(100, 740, f"Payment Mode: {transaction.payment_mode}")
+    p.drawString(100, 720, f"Status: {'✅' if transaction.status else '❌'}")
+    p.showPage()
+    p.save()
+
+    return response

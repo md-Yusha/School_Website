@@ -285,6 +285,31 @@
                 font-size: 1.6rem; /* Smaller font size on very small screens */
             }
         }
+        .download-button {
+            display: inline-block;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #007bff; /* Primary blue color */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .download-button:hover {
+            background-color: #0056b3; /* Darker blue for hover */
+        }
+        
+        .download-button:active {
+            background-color: #003f7f; /* Even darker blue for active state */
+        }
+        
+        .download-button:focus {
+            outline: 2px solid #0056b3;
+            outline-offset: 2px;
+        }
     </style>
     
     
@@ -338,7 +363,7 @@
                         <th>Transaction_id</th>
                         <th>Status</th>
                         <th>Payment Mode</th>
-                        <th>Dowload Receipt</th>
+                        <th>Receipt</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -353,6 +378,11 @@
                         <td>✅</td>
                         {% endif %}
                         <td>{{ transaction.payment_mode }}</td>
+                        <td>
+                        <form method="get" action="{% url 'download_receipt' transaction.transaction_id %}">
+                            <button type="submit" class="download-button">Download</button>
+                        </form>
+                        </td>
                     </tr>
                     {% empty %}
                     <tr>
