@@ -160,12 +160,35 @@ form {
         font-size: 1.8rem;
     }
 }
+.messages {
+    margin: 20px 0;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #f8d7da; /* Light red background for error */
+    color: #721c24; /* Dark red text for error */
+}
 
+.messages .message {
+    margin-bottom: 10px;
+}
 
+.messages .message.success {
+    background-color: #d4edda; /* Light green background for success */
+    color: #155724; /* Dark green text for success */
+}
     </style>
 </head>
 <body>
     <h1 style="text-align: center;">Register</h1>
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
     <form id="registration-form" method="POST" action="/register/">
         {% csrf_token %}
 
