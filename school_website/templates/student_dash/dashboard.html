@@ -285,76 +285,131 @@
                 font-size: 1.6rem; /* Smaller font size on very small screens */
             }
         }
+        .download-button {
+            display: inline-block;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #007bff; /* Primary blue color */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .download-button:hover {
+            background-color: #0056b3; /* Darker blue for hover */
+        }
+        
+        .download-button:active {
+            background-color: #003f7f; /* Even darker blue for active state */
+        }
+        
+        .download-button:focus {
+            outline: 2px solid #0056b3;
+            outline-offset: 2px;
+        }
     </style>
-    
-    
 </head>
 <body>
     <div class="logout">
         <button onclick="logout()">Logout</button>
     </div>    
-    <div class="container">
-        <h1>Student Dashboard</h1>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">Student Dashboard</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h4>{{ student.name }}</h4>
+                                <p><strong>Class:</strong> {{ student.class }}</p>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+                            </div>
+                        </div>
 
-        <!-- Fee Due -->
-        <div class="fee-due">
-            Fee Due: ₹{{ student.fee_due|default:0 }}
-        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card bg-light mb-3">
+                                    <div class="card-header">Fee Details</div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <h5>Total Fee</h5>
+                                                <p class="text-primary">₹{{ student.total_fee }}</p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h5>Paid Fee</h5>
+                                                <p class="text-success">₹{{ student.paid_fee }}</p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h5>Remaining Fee</h5>
+                                                <p class="text-danger">₹{{ student.remaining_fee }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="progress mt-3">
+                                            <div 
+                                                class="progress-bar {% if student.fee_percentage_paid < 50 %}bg-danger{% elif student.fee_percentage_paid < 100 %}bg-warning{% else %}bg-success{% endif %}" 
+                                                role="progressbar" 
+                                                style="width: {{ student.fee_percentage_paid }}%;" 
+                                                aria-valuenow="{{ student.fee_percentage_paid }}" 
+                                                aria-valuemin="0" 
+                                                aria-valuemax="100">
+                                                {{ student.fee_percentage_paid }}% Paid
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-        <div class="details">
-            <div>
-                <strong>Username:</strong> {{ student.username }}
-            </div>
-            <div>
-                <strong>Email:</strong> {{ student.email }}
-            </div>
-            <div>
-                <strong>Name:</strong> {{ student.name }}
-            </div>
-            <div>
-                <strong>Father's Name:</strong> {{ student.father_name }}
-            </div>
-            <div>
-                <strong>Class:</strong> {{ student.class }}
-            </div>
-            <div>
-                <strong>Phone Number:</strong> {{ student.phone_number }}
-            </div>
-            <div>
-                <strong>Alternative Phone:</strong> {{ student.alt_number }}
-            </div>
-            <div>
-                <strong>Address:</strong> {{ student.address }}
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <h4>Recent Transactions</h4>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for transaction in transactions %}
+                                        <tr>
+                                            <td>{{ transaction.date|date:"d M Y" }}</td>
+                                            <td>₹{{ transaction.amount }}</td>
+                                            <td>
+                                                {% if transaction.status %}
+                                                    <span class="badge bg-success">Paid</span>
+                                                {% else %}
+                                                    <span class="badge bg-warning">Pending</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'download_receipt' transaction.id %}" class="btn btn-sm btn-info">Download Receipt</a>
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4" class="text-center">No transactions found</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <a class="pay-button" id="renderBtn">Pay Fee</a>
-        <div class="transaction-history">
-            <h2>Transaction History</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Transaction Time</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for transaction in transactions %}
-                    <tr>
-                        <td>{{ transaction.time }}</td>
-                        <td>₹{{ transaction.amount }}</td>
-                        <td>{{ transaction.status }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="3">No transaction history available.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        
     </div>
     <div class="overlay" id="overlay"></div>
     <div class="popup" id="popup">
@@ -437,8 +492,8 @@
         
     });
     function logout() {
-        // Replace with actual logout logic (e.g., clearing session, redirecting to login page)
-        window.location.href = '/logout'; // Redirect to the logout endpoint
+        // Redirect to logout URL
+        window.location.href = "{% url 'logout' %}";
     }
     
 </script>

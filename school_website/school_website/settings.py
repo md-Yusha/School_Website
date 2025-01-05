@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['.ngrok-free.app','127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'grappelli',  # Make sure this is first
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,6 +51,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Replace the old middleware with the new dashboard statistics middleware
+    'school.admin.DashboardStatisticsMiddleware',
 ]
 
 ROOT_URLCONF = 'school_website.urls'
@@ -57,7 +60,11 @@ ROOT_URLCONF = 'school_website.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,"templates")],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'templates', 'admin'),
+            os.path.join(BASE_DIR, 'templates', 'admin_custom')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,7 +137,45 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-#CSRF_TRUSTED_ORIGINS = [
-#    'https://b16c-2409-40f2-19-7068-28d4-6bac-fafa-74fa.ngrok-free.app',  # Replace with your ngrok URL
-#]
+# Admin site customization
+ADMIN_SITE_HEADER = 'School Management System'
+ADMIN_SITE_TITLE = 'School Admin'
+ADMIN_INDEX_TITLE = 'Welcome to School Management System'
 
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'likithmvjce@gmail.com'  # Replace with your email
+EMAIL_HOST_PASSWORD = 'uhma iogi sgwd exmi'  # Use App Password, not regular password
+DEFAULT_FROM_EMAIL = 'School Management System <likithmvjce@gmail.com>'
+
+# Logging Configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'school': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
+#CSRF_TRUSTED_ORIGINS = [
+#    'https://bfb4-2405-201-d01b-882a-9d5a-4b0d-cf91-da93.ngrok-free.app',  # Replace with your ngrok URL
+#]

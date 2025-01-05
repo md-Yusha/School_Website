@@ -1,0 +1,17 @@
+{% load i18n %}
+{% if actions %}
+    <div class="actions">
+        <div class="action-wrapper">
+            {% if action_form and actions_on_top and cl.show_admin_actions %}
+                <div class="action-container">
+                    <select name="action" required>
+                        <option value="" selected="selected">{% trans "Select Action" %}</option>
+                        {% for action in actions %}
+                            <option value="{{ action.0 }}">{{ action.1 }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
