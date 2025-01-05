@@ -22,6 +22,13 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 import hashlib
 from reportlab.lib.pagesizes import letter
+from django.template.loader import render_to_string
+from weasyprint import HTML
+from hashlib import sha256
+from django.template.loader import render_to_string
+
+
+
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 # Create your views here.
 def home(request):
@@ -316,102 +323,48 @@ def update_fee(request):
     return JsonResponse({"error": "Error updating fee."}, status=400)
 
 
+
+
+
 def download_receipt(request, transaction_id):
+    """
+    Generate and download the receipt as a PDF using the HTML template.
+    """
     # Fetch transaction and user details from the database
     transaction = get_object_or_404(Transactions, transaction_id=transaction_id)
     user_profile = get_object_or_404(UserProfile, user=transaction.user)
 
-    # Create PDF response
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="receipt_{transaction_id}.pdf"'
-
-    # Generate PDF using ReportLab
-    p = canvas.Canvas(response, pagesize=letter)
-
-    # Set page dimensions
-    page_width, page_height = letter
-
-    # Add logo
-    logo_path = "C:\\Users\\Mayuri\\Desktop\\Django\\School_Website\\school_website\\static\\logo.jpg"  # Replace with actual logo path
-    logo = ImageReader(logo_path)
-    logo_width = 100
-    logo_height = 50
-    logo_x = (page_width - logo_width) / 2
-    logo_y = page_height - 100
-    p.drawImage(logo, logo_x, logo_y, width=logo_width, height=logo_height)
-
-    # Header with Branding
-    p.setFont("Helvetica-Bold", 24)
-    header_text = "Public School"
-    p.drawCentredString(page_width / 2, logo_y - 20, header_text)
-
-    p.setFont("Helvetica", 14)
-    tagline_text = "Educating for a Brighter Future"
-    p.drawCentredString(page_width / 2, logo_y - 50, tagline_text)
-
-    # Subheader
-    p.setFont("Helvetica-Bold", 16)
-    subheader_text = "Transaction Receipt"
-    p.drawCentredString(page_width / 2, logo_y - 80, subheader_text)
-
-    # Add separator
-    p.setFont("Helvetica", 12)
-    filler_text = "---------------------------------------------------"
-    p.drawCentredString(page_width / 2, logo_y - 100, filler_text)
-
-    # Transaction Details
-    details_start_y = logo_y - 120
-    p.setFont("Helvetica", 12)
-    p.drawCentredString(page_width / 2, details_start_y, f"Transaction ID: {transaction.transaction_id}")
-    p.drawCentredString(page_width / 2, details_start_y - 20, f"Date: {transaction.date}")
-    p.drawCentredString(page_width / 2, details_start_y - 40, f"Amount: Rs.{transaction.amount}")
-    p.drawCentredString(page_width / 2, details_start_y - 60, f"Payment Mode: {transaction.payment_mode}")
-    p.drawCentredString(page_width / 2, details_start_y - 80, f"Status: {'PAID' if transaction.status else 'PENDING'}")
-
-    # User Details
-    user_start_y = details_start_y - 100
-    p.drawCentredString(page_width / 2, user_start_y, filler_text)
-    p.drawCentredString(page_width / 2, user_start_y - 20, f"Student Name: {user_profile.Name}")
-    p.drawCentredString(page_width / 2, user_start_y - 40, f"Email: {user_profile.email}")
-    p.drawCentredString(page_width / 2, user_start_y - 60, f"Phone Number: {user_profile.phone_number}")
-    p.drawCentredString(page_width / 2, user_start_y - 80, f"Fee Due: Rs.{user_profile.Fee_Due}")
-
-    # Digital Signature (for successful payments)
-    signature_start_y = user_start_y - 110
+    # Generate Digital Signature if the payment is successful
+    digital_signature = None
     if transaction.status:
-        signature_text = "Digitally Signed by Public School"
-        p.setFont("Helvetica", 10)
-        p.drawCentredString(page_width / 2, signature_start_y, signature_text)
-
-        # Generate and display the unique hash
         hash_data = f"{transaction.transaction_id}{transaction.date}{transaction.amount}".encode()
-        digital_signature = hashlib.sha256(hash_data).hexdigest()
+        digital_signature = sha256(hash_data).hexdigest()
 
-        # Wrap the digital signature if too long for a single line
-        p.setFont("Helvetica", 8)
-        max_chars_per_line = 50
-        for i in range(0, len(digital_signature), max_chars_per_line):
-            line_text = digital_signature[i:i + max_chars_per_line]
-            p.drawCentredString(page_width / 2, signature_start_y - 20 - (i // max_chars_per_line) * 10, line_text)
-    else:
-        # Authorized Signature (for pending payments)
-        auth_signature_y = user_start_y - 150
-        p.setFont("Helvetica", 12)
-        p.drawString(50, auth_signature_y, "Authorized Signature:")
-        p.line(200, auth_signature_y, 500, auth_signature_y)
+    # Context for the receipt template
+    context = {
+        'name': user_profile.Name,
+        # 'usn': user_profile.usn,
+        'date': transaction.date,
+        'amount': transaction.amount,
+        'fee_due': user_profile.Fee_Due,
+        'payment_mode': transaction.payment_mode,
+        'transaction_id': transaction.transaction_id if transaction.payment_mode != "cash" else None,
+        'receiver': "Public School" if transaction.payment_mode != "online" else None,
+        'digital_signature': digital_signature,  # Include the digital signature in the context
+        'status': transaction.status,  # Pass the payment status to determine which signature to show
+    }
 
-    # Footer
-    footer_start_y = user_start_y - 200
-    p.setFont("Helvetica", 14)
-    footer_text = "Thank you for your transaction!"
-    p.drawCentredString(page_width / 2, footer_start_y, footer_text)
+    # Render the HTML template as a string
+    html_template = render_to_string('bill_template.html', context)
 
-    p.setFont("Helvetica", 10)
-    footer_note = "For any queries, contact us at support@publicschool.com"
-    p.drawCentredString(page_width / 2, footer_start_y - 20, footer_note)
+    # Generate PDF using weasyprint
+    pdf_file = HTML(string=html_template).write_pdf()
 
-    # Finalize PDF
-    p.showPage()
-    p.save()
-
+    # Return the PDF as a downloadable response
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="receipt_{transaction_id}.pdf"'
+    
     return response
+
+
+

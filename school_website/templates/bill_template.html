@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            padding: 20px;
+            width: 80%;
+            margin: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            max-width: 150px;
+        }
+        .header h1 {
+            margin: 10px 0;
+            font-size: 24px;
+            color: #222;
+        }
+        .header p {
+            font-size: 14px;
+            color: #555;
+        }
+        .details {
+            margin: 20px 0;
+        }
+        .details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .details th, .details td {
+            text-align: left;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+        }
+        .details th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
+        .signature {
+            margin-top: 30px;
+            text-align: center;
+            color: #777;
+        }
+        .signature-line {
+            border-top: 1px solid #333;
+            width: 200px;
+            margin-top: 5px;
+            color: #777;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="static/logo.png" alt="Public School Logo">
+            <h1>Public School</h1>
+            <p>Educating for a Brighter Future</p>
+            <h3>Transaction Receipt</h3>
+        </div>
+        <div class="details">
+            <table>
+                <tr>
+                    <th>Student Name</th>
+                    <td>{{ name }}</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td>{{ date }}</td>
+                </tr>
+                <tr>
+                    <th>Amount</th>
+                    <td>₹{{ amount }}</td>
+                </tr>
+                <tr>
+                    <th>Fee Due</th>
+                    <td>₹{{ fee_due }}</td>
+                </tr>
+                <tr>
+                    <th>Payment Mode</th>
+                    <td>{{ payment_mode }}</td>
+                </tr>
+                {% if status %}
+                <tr>
+                    <th>Transaction ID</th>
+                    <td>{{ transaction_id }}</td>
+                </tr>
+                {% endif %}
+                {% if receiver %}
+                <tr>
+                    <th>Received By</th>
+                    <td>{{ receiver }}</td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+
+       <!-- Inside bill_template.html -->
+{% if status %}
+<!-- Digital Signature for successful payment -->
+<div class="signature">
+    <p>Digitally Signed by Public School</p>
+    <p style="font-size: 10px">{{ digital_signature}}</p>
+</div>
+{% else %}
+<!-- Authorized Signature for pending payments -->
+<div class="signature">
+    <p>Authorized Signature</p>
+    <div class="signature-line"></div>
+</div>
+{% endif %}
+
+        <div class="footer">
+            <p>Thank you for your payment!</p>
+            <p>For queries, contact support@publicschool.com</p>
+        </div>
+    </div>
+</body>
+</html>
