@@ -1,0 +1,4 @@
+{% if field_name == 'action_checkbox' %}
+    <input type="checkbox" name="{{ action_checkbox_name }}" class="action-select" value="{{ result.pk }}"
+           {% if action_checkbox_checked %}checked="checked"{% endif %}/>
+{% endif %}

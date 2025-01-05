@@ -1,0 +1,151 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    :root {
+        --primary-color: #1A5F7A;      /* Deep Teal */
+        --secondary-color: #159895;    /* Vibrant Teal */
+        --accent-color: #57C5B6;       /* Soft Teal */
+        --background-light: #F8F9FA;
+        --text-primary: #2C3E50;
+        --card-shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: var(--background-light);
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+    }
+
+    .dashboard-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px var(--card-shadow);
+        padding: 25px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .dashboard-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    }
+
+    .dashboard-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .dashboard-card-header h3 {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .dashboard-card-header i {
+        color: var(--secondary-color);
+        font-size: 1.5rem;
+    }
+
+    .dashboard-card-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .dashboard-card-content .count {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .dashboard-card-content .icon {
+        color: var(--accent-color);
+        font-size: 3rem;
+        opacity: 0.7;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .logout-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: #dc3545;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .logout-btn:hover {
+        background-color: #c82333;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <a href="{% url 'admin:logout' %}" class="logout-btn">Logout</a>
+    <div class="dashboard-grid">
+        {% if app_list %}
+            {% for app in app_list %}
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <h3>
+                            <i class="bi {% if app.name == 'Authentication and Authorization' %}bi-shield-lock{% elif app.name == 'School' %}bi-building{% elif app.name == 'Transactions' %}bi-cash-stack{% elif app.name == 'User profiles' %}bi-people{% else %}bi-grid-3x3-gap{% endif %}"></i>
+                            {{ app.name }}
+                        </h3>
+                    </div>
+                    <div class="dashboard-card-content">
+                        <div class="count">{{ app.models|length }}</div>
+                        <div class="icon">
+                            <i class="bi {% if app.name == 'Authentication and Authorization' %}bi-shield-lock{% elif app.name == 'School' %}bi-building{% elif app.name == 'Transactions' %}bi-cash-stack{% elif app.name == 'User profiles' %}bi-people{% else %}bi-grid-3x3-gap{% endif %}"></i>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
+                    <h3><i class="bi bi-info-circle"></i> No Applications Found</h3>
+                </div>
+                <div class="dashboard-card-content">
+                    <p>There are no applications configured in the admin dashboard.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
