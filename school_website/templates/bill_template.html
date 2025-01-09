@@ -11,6 +11,9 @@
             padding: 0;
             color: #333;
         }
+        .logo {
+            margin: 20px;
+        } 
         .container {
             padding: 20px;
             width: 80%;
@@ -21,8 +24,11 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .header {
-            text-align: center;
+            display: flex;
             margin-bottom: 20px;
+        }
+        .description {
+            margin: 20px;
         }
         .header img {
             max-width: 150px;
@@ -37,7 +43,7 @@
             color: #555;
         }
         .details {
-            margin: 20px 0;
+            margin: 20px 20px;
         }
         .details table {
             width: 100%;
@@ -55,7 +61,7 @@
         .footer {
             text-align: center;
             margin-top: 20px;
-            font-size: 12px;
+            font-size: 18px;
             color: #777;
         }
         .signature {
@@ -64,8 +70,8 @@
             color: #777;
         }
         .signature-line {
-            border-top: 1px solid #333;
-            width: 200px;
+            border-top: 2px solid #777;
+            width: 800px;
             margin-top: 5px;
             color: #777;
             display: inline-block;
@@ -75,11 +81,17 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="static/logo.png" alt="Public School Logo">
-            <h1>Public School</h1>
-            <p>Educating for a Brighter Future</p>
-            <h3>Transaction Receipt</h3>
+            <div class="logo">
+                <img src="{{ logo_url }}" >
+            </div>
+            <div class="description">
+                <h1>Public School</h1>
+                <p>Educating for a Brighter Future</p>
+            </div>
+            
+            
         </div>
+        <h2 style="text-align: center">Transaction Receipt</h2>
         <div class="details">
             <table>
                 <tr>
@@ -129,6 +141,7 @@
 <div class="signature">
     <p>Authorized Signature</p>
     <div class="signature-line"></div>
+    <p><br><br></p>
 </div>
 {% endif %}
 

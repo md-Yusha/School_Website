@@ -26,6 +26,7 @@ from django.template.loader import render_to_string
 from weasyprint import HTML
 from hashlib import sha256
 from django.template.loader import render_to_string
+from django.templatetags.static import static
 
 
 
@@ -339,7 +340,7 @@ def download_receipt(request, transaction_id):
     if transaction.status:
         hash_data = f"{transaction.transaction_id}{transaction.date}{transaction.amount}".encode()
         digital_signature = sha256(hash_data).hexdigest()
-
+    logo_url = request.build_absolute_uri(static('logo.png'))
     # Context for the receipt template
     context = {
         'name': user_profile.Name,
@@ -352,6 +353,7 @@ def download_receipt(request, transaction_id):
         'receiver': "Public School" if transaction.payment_mode != "online" else None,
         'digital_signature': digital_signature,  # Include the digital signature in the context
         'status': transaction.status,  # Pass the payment status to determine which signature to show
+        'logo_url': logo_url,  # Include the logo URL in the context
     }
 
     # Render the HTML template as a string

@@ -3,9 +3,10 @@
 <html lang="en">
 
 <head>
+  {% block scr %}{% endblock scr %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Website</title>
+    <title>{% block title %}School Website{% endblock title %}</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -64,7 +65,7 @@
           left: 20px;
           width: 80px;
           height: 50px;
-          background-color: #004bad00 ;
+          background-color:rgba(64, 123, 249, 0) ;
           border: none;
           /* border: 3px solid #fff; */
           /* border-radius: 50%; */
@@ -153,282 +154,385 @@
           filter: blur(4px);
           pointer-events: none;
         }
+{% block extrastyles %}
+.menu-toggle {
+  display: none;
+  font-size: 1.8em;
+  cursor: pointer;
+}
 
-        .menu-toggle {
-            display: none;
-            font-size: 1.8em;
-            cursor: pointer;
-        }
+.menu-close {
+  display: none;
+  font-size: 1.8rem;
+  color: white;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  z-index: 21;
+}
 
-        .menu-close {
-            display: none;
-            font-size: 1.8em;
-            color: white;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            cursor: pointer;
-            z-index: 21;
-        }
+/* Hero Banner */
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: 90vh;
+  background: linear-gradient(
+          to bottom,
+          rgba(0, 45, 98, 0.8),
+          rgba(0, 45, 98, 0.9)
+      ),
+      url('https://example.com/school-banner.jpg') no-repeat center/cover;
+  display: flex;
+  {% comment %} align-items: center; {% endcomment %}
+  justify-content: center;
+  text-align: center;
+  color: var(--white);
+  overflow: hidden;
+}
 
-        /* Hero Banner */
-        .hero-banner {
-            position: relative;
-            width: 100%;
-            height: 90vh;
-            background: linear-gradient(
-                    to bottom,
-                    rgba(0, 45, 98, 0.8),
-                    rgba(0, 45, 98, 0.9)
-                ),
-                url('https://example.com/school-banner.jpg') no-repeat center/cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--white);
-            overflow: hidden;
-        }
+.hero-banner .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0, 45, 98, 0.4), rgba(0, 45, 98, 0.8));
+  z-index: 1;
+}
 
-        .hero-banner .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(0, 45, 98, 0.4), rgba(0, 45, 98, 0.8));
-            z-index: 1;
-        }
+.hero-banner .content {
+  position: relative;
+  z-index: 2;
+  font-family: 'Poppins', sans-serif;
+  padding: 1rem;
+}
 
-        .hero-banner .content {
-            position: relative;
-            z-index: 2;
-            font-family: 'Poppins', sans-serif;
-            padding: 1rem;
-        }
+.headline {
+  font-size: 3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--golden-yellow);
+  margin-bottom: 1rem;
+  animation: fadeInDown 1.5s ease-in-out;
+}
 
-        .headline {
-            font-size: 3rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            color: var(--golden-yellow);
-            margin-bottom: 1rem;
-            animation: fadeInDown 1.5s ease-in-out;
-        }
+.headline .highlight {
+  color: var(--white);
+}
 
-        .headline .highlight {
-            color: var(--white);
-        }
+.subtext {
+  font-size: 1.5rem;
+  font-weight: 400;
+  font-family: 'Roboto', sans-serif;
+  margin-bottom: 2rem;
+  animation: fadeInUp 1.5s ease-in-out;
+}
 
-        .subtext {
-            font-size: 1.5rem;
-            font-weight: 400;
-            font-family: 'Roboto', sans-serif;
-            margin-bottom: 2rem;
-            animation: fadeInUp 1.5s ease-in-out;
-        }
+.cta-button {
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0.8rem 2rem;
+  color: var(--primary-blue);
+  background-color: var(--golden-yellow);
+  border-radius: 50px;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
 
-        .cta-button {
-            font-size: 1.2rem;
-            font-weight: 600;
-            padding: 0.8rem 2rem;
-            color: var(--primary-blue);
-            background-color: var(--golden-yellow);
-            border-radius: 50px;
-            text-transform: uppercase;
-            text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
+.cta-button:hover {
+  background-color: var(--white);
+  transform: translateY(-5px);
+}
 
-        .cta-button:hover {
-            background-color: var(--white);
-            transform: translateY(-5px);
-        }
+/* Animations */
+@keyframes fadeInDown {
+  from {
+      opacity: 0;
+      transform: translateY(-20px);
+  }
 
-        /* Animations */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+@keyframes fadeInUp {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-banner {
+      height: 70vh;
+      background-size: cover;
+  }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero-banner {
-                height: 70vh;
-                background-size: cover;
-            }
+  .headline {
+      font-size: 2rem;
+  }
 
-            .headline {
-                font-size: 2rem;
-            }
+  .subtext {
+      font-size: 1.2rem;
+  }
 
-            .subtext {
-                font-size: 1.2rem;
-            }
+  .cta-button {
+      font-size: 1rem;
+      padding: 0.6rem 1.5rem;
+  }
+}
 
-            .cta-button {
-                font-size: 1rem;
-                padding: 0.6rem 1.5rem;
-            }
-        }
+@media (max-width: 480px) {
+  .hero-banner {
+      height: 60vh;
+      text-align: center;
+  }
 
-        @media (max-width: 480px) {
-            .hero-banner {
-                height: 60vh;
-                text-align: center;
-            }
+  .headline {
+      font-size: 1.8rem;
+  }
 
-            .headline {
-                font-size: 1.8rem;
-            }
+  .subtext {
+      font-size: 1rem;
+  }
 
-            .subtext {
-                font-size: 1rem;
-            }
+  .cta-button {
+      font-size: 0.9rem;
+      padding: 0.5rem 1.2rem;
+  }
 
-            .cta-button {
-                font-size: 0.9rem;
-                padding: 0.5rem 1.2rem;
-            }
-
-        }
-        /* Login Button */
+}
+/* Login Button */
 .login-button {
-    position: absolute;
-    top: 40px;
-    right: 20px;
-    z-index: 1000;
+position: absolute;
+top: 40px;
+right: 20px;
+z-index: 1000;
 }
 
 .login-btn {
-    padding: 8px 16px;
-    font-size: 1rem;
-    color: var(--primary-blue);
-    background-color: var(--golden-yellow);
-    border: none;
-    border-radius: 20px;
-    text-decoration: none;
-    transition: all 0.3s ease-in-out;
-    font-family: 'Roboto', sans-serif;
+padding: 8px 16px;
+font-size: 1rem;
+color: var(--primary-blue);
+background-color: var(--golden-yellow);
+border: none;
+border-radius: 20px;
+text-decoration: none;
+transition: all 0.3s ease-in-out;
+font-family: 'Roboto', sans-serif;
 }
 
 .login-btn:hover {
-    background-color: var(--white);
-    color: var(--primary-blue);
-    transform: scale(1.05);
+background-color: var(--white);
+color: var(--primary-blue);
+transform: scale(1.05);
+}
+.section {
+  display: none; /* Hide all sections */
 }
 
+.section.active {
+  display: block; /* Show the active section */
+}
+
+{% endblock extrastyles %}
+        
     </style>
 </head>
 
 <body>
-    <!-- Navbar -->
-    
-    <div class="logo-container" id="logo-container">
-        <img src="static/logo.png" alt="Logo" id="logo">
-      </div>
-
-      
-
       <div class="navbar">
         <button class="navbar-toggle" aria-label="Toggle navigation">
             <span class="bar"></span>
             <span class="bar2"></span>
         </button>
+        {% block login %}
         <div class="login-button">
-            {% if user == "AnonymousUser" %}
-            <a href="/login" class="login-btn">Login</a>
-            {% else %}
-            <a href="/dashboard/{{user}}" class="login-btn">Dashboard</a>
-            {% endif %}
+          {% if user == "AnonymousUser" %}
+          <a href="/login" class="login-btn">Login</a>
+          {% else %}
+          <a href="/dashboard/{{user}}" class="login-btn">Dashboard</a>
+          {% endif %}
         </div>
+        {% endblock login %}
     </div>
       <!-- Side Navbar -->
-      <div class="side-navbar">
-        <a data-target="home">Home</a>
-        <a data-target="about">About</a>
-        <a data-target="Contact Us">Contact Us</a>
-        <a data-target="Academics">Academics</a>
+       {% block side-navbar %}
+       <div class="side-navbar">
+        <a href='#' data-target="home">Home</a>
+        <a href='#' data-target="about">About</a>
+        <a href='#' data-target="Contact-Us">Contact Us</a>
+        <a href='#' data-target="Academics">Academics</a>
       </div>
+       {% endblock side-navbar %}
 
+      
+    {% block body %}
+    <div class="logo-container" id="logo-container">
+      <img src="static/logo.png" alt="Logo" id="logo">
+    </div>
     <!-- Hero Banner -->
+    <div class="overlay"></div>
+    
     <section class="hero-banner">
-        <div class="overlay"></div>
-        <div class="content">
-            <h1 class="headline">Welcome to <span class="highlight">BlueGold Academy</span></h1>
-            <p class="subtext">Where Education Meets Excellence</p>
-            <a href="#about" class="cta-button">Discover More</a>
+      <div class="content">
+        <h1 class="headline">Welcome to <span class="highlight">BlueGold Academy</span></h1>
+        <p class="subtext">Where Education Meets Excellence</p>
+        <a href='#' data-target="about" class="cta-button">Discover More</a>
+    </div>
+    </section>
+      <section id="home" class="section">
+        <div class="welcome-message">
+            <h2 class="section-title">Welcome to BlueGold Academy</h2>
+            <p>At BlueGold Academy, we inspire minds, shape futures, and nurture excellence. Our campus is a vibrant hub where learning meets passion, and students discover their true potential.</p>
+        </div>
+        <div class="key-highlights">
+            <h3>Why Choose Us?</h3>
+            <ul>
+                <li>💡 <strong>Innovative Curriculum:</strong> Designed to foster critical thinking and creativity.</li>
+                <li>🌍 <strong>Global Perspective:</strong> Empowering students to succeed in a connected world.</li>
+                <li>🎓 <strong>Exceptional Faculty:</strong> Experienced educators dedicated to student growth.</li>
+                <li>🏆 <strong>Outstanding Results:</strong> Proven track record of academic and extracurricular success.</li>
+            </ul>
         </div>
     </section>
+  <section id="about" class="section">
+    <h2 class="section-title">About Us</h2>
+    <div class="about-content">
+        <p>BlueGold Academy has been a beacon of academic excellence since 1995. We are committed to providing quality education that nurtures both intellectual growth and character development.</p>
+        <div class="academics-grid">
+            <div class="program-card">
+                <h3>Our Vision</h3>
+                <p>To be a leading institution that shapes future leaders through innovative education and holistic development.</p>
+            </div>
+            <div class="program-card">
+                <h3>Our Mission</h3>
+                <p>Providing excellence in education through dedicated teaching, modern facilities, and comprehensive development programs.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
+<!-- New Academics Section -->
+<section id="Academics" class="section">
+    <h2 class="section-title">Academic Programs</h2>
+    <div class="academics-grid">
+        <div class="program-card">
+            <h3>Primary Education</h3>
+            <p>Grades 1-5</p>
+            <ul>
+                <li>Foundation in core subjects</li>
+                <li>Creative arts and music</li>
+                <li>Physical education</li>
+            </ul>
+        </div>
+        <div class="program-card">
+            <h3>Middle School</h3>
+            <p>Grades 6-8</p>
+            <ul>
+                <li>Advanced core curriculum</li>
+                <li>STEAM programs</li>
+                <li>Leadership development</li>
+            </ul>
+        </div>
+        <div class="program-card">
+            <h3>High School</h3>
+            <p>Grades 9-12</p>
+            <ul>
+                <li>College preparation</li>
+                <li>Advanced Placement courses</li>
+                <li>Career guidance</li>
+            </ul>
+        </div>
+    </div>
+</section>
 
-    <!-- JavaScript for Menu Toggle -->
+<!-- New Contact Section -->
+<section id="Contact-Us" class="section">
+    <h2 class="section-title">Contact Us</h2>
+    <div class="contact-form">
+        <form method="post" >
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="cta-button">Send Message</button>
+        </form>
+    </div>
+</section>
+
+  <!-- JavaScript for Menu Toggle -->
+    {% endblock body %}
+    
     <script>
 
-    const toggleButton = document.querySelector('.navbar-toggle');
-    const sideNavbar = document.querySelector('.side-navbar');
-    const links = document.querySelectorAll('.side-navbar a');
-    const sections = document.querySelectorAll('section');
-    const body = document.body;
-    const logoContainer = document.getElementById('logo-container');
-    const logo = document.getElementById('logo');
+const toggleButton = document.querySelector('.navbar-toggle');
+const sideNavbar = document.querySelector('.side-navbar');
+const links = document.querySelectorAll('.side-navbar a');
+const sections = document.querySelectorAll('section');
+const body = document.body;
+const logoContainer = document.getElementById('logo-container');
+const logo = document.getElementById('logo');
 
-    // Toggle Navbar and Blur Effect
-    toggleButton.addEventListener('click', () => {
-      sideNavbar.classList.toggle('active');
-      // Toggle blur effect on sections and footer
-      if (sideNavbar.classList.contains('active')) {
-        document.querySelectorAll('section, .footer').forEach(el => el.classList.add('blur'));
-      } else {
-        document.querySelectorAll('section, .footer').forEach(el => el.classList.remove('blur'));
-      }
-    });
+// Toggle Navbar and Blur Effect
+toggleButton.addEventListener('click', () => {
+  sideNavbar.classList.toggle('active');
+  // Toggle blur effect on sections and footer
+  if (sideNavbar.classList.contains('active')) {
+    document.querySelectorAll('section, .footer').forEach(el => el.classList.add('blur'));
+  } else {
+    document.querySelectorAll('section, .footer').forEach(el => el.classList.remove('blur'));
+  }
+});
 
-    // Handle Navbar Button Clicks
-    links.forEach(link => {
-      link.addEventListener('click', () => {
-        // Hide all sections
-        sections.forEach(section => section.classList.remove('active'));
+// Handle Navbar Button Clicks
+links.forEach(link => {
+  link.addEventListener('click', () => {
+    // Hide all sections
+    sections.forEach(section => section.classList.remove('active'));
 
-        // Show the clicked section
-        const target = document.getElementById(link.dataset.target);
-        target.classList.add('active');
+    // Show the clicked section
+    const target = document.getElementById(link.dataset.target);
+    target.classList.add('active');
 
-        // Close the navbar
-        sideNavbar.classList.remove('active');
-        
-        // Remove blur effect
-        document.querySelectorAll('section, .footer').forEach(el => el.classList.remove('blur'));
-      });
-    });
+    // Close the navbar
+    sideNavbar.classList.remove('active');
+    
+    // Remove blur effect
+    document.querySelectorAll('section, .footer').forEach(el => el.classList.remove('blur'));
+  });
+});
+{% block script %}
+// Logo Animation - Hide after 3 seconds
+window.onload = () => {
+  setTimeout(() => {
+    logoContainer.style.opacity = '0';
+    logoContainer.style.visibility = 'hidden'; // Hide logo after animation
+  }, 3000); // After 3 seconds, hide the logo and show the landing page
+};
+{% endblock script %}
 
-    // Logo Animation - Hide after 3 seconds
-    window.onload = () => {
-      setTimeout(() => {
-        logoContainer.style.opacity = '0';
-        logoContainer.style.visibility = 'hidden'; // Hide logo after animation
-      }, 3000); // After 3 seconds, hide the logo and show the landing page
-    };
+   
     </script>
 </body>
 </html>
