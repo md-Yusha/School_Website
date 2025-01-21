@@ -6,10 +6,13 @@
   {% block scr %}{% endblock scr %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}School Website{% endblock title %}</title>
+    <title>{% block title %}JPR Educational Institute{% endblock title %}</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- Styles -->
     <style>
@@ -184,67 +187,97 @@
       ),
       url('https://example.com/school-banner.jpg') no-repeat center/cover;
   display: flex;
-  {% comment %} align-items: center; {% endcomment %}
+  align-items: center;
   justify-content: center;
   text-align: center;
   color: var(--white);
   overflow: hidden;
 }
 
-.hero-banner .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(0, 45, 98, 0.4), rgba(0, 45, 98, 0.8));
-  z-index: 1;
-}
-
 .hero-banner .content {
   position: relative;
   z-index: 2;
   font-family: 'Poppins', sans-serif;
-  padding: 1rem;
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .headline {
-  font-size: 3rem;
+  font-size: 3.5rem;
   font-weight: 800;
   text-transform: uppercase;
   color: var(--golden-yellow);
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   animation: fadeInDown 1.5s ease-in-out;
-}
-
-.headline .highlight {
-  color: var(--white);
+  line-height: 1.2;
 }
 
 .subtext {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 400;
   font-family: 'Roboto', sans-serif;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   animation: fadeInUp 1.5s ease-in-out;
+  line-height: 1.4;
 }
 
 .cta-button {
   font-size: 1.2rem;
   font-weight: 600;
-  padding: 0.8rem 2rem;
+  padding: 1rem 2.5rem;
   color: var(--primary-blue);
   background-color: var(--golden-yellow);
   border-radius: 50px;
   text-transform: uppercase;
   text-decoration: none;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 1.8s ease-in-out;
 }
 
 .cta-button:hover {
   background-color: var(--white);
   transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-banner {
+      height: 80vh;
+  }
+
+  .headline {
+      font-size: 2.5rem;
+  }
+
+  .subtext {
+      font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-banner {
+      height: 70vh;
+  }
+
+  .headline {
+      font-size: 2rem;
+  }
+
+  .subtext {
+      font-size: 1.2rem;
+  }
+
+  .cta-button {
+      font-size: 1rem;
+      padding: 0.8rem 2rem;
+  }
 }
 
 /* Animations */
@@ -346,6 +379,965 @@ transform: scale(1.05);
   display: block; /* Show the active section */
 }
 
+#home {
+  display: block; /* Always show home section by default */
+}
+
+/* Additional Styles */
+.quick-links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 40px 20px;
+}
+
+.quick-link-card {
+    background: var(--primary-blue);
+    color: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.quick-link-card:hover {
+    transform: translateY(-5px);
+    background: #003d82;
+}
+
+.quick-link-card i {
+    font-size: 2.5em;
+    color: var(--golden-yellow);
+    margin-bottom: 15px;
+}
+
+.calendar-events {
+    background: #f5f5f5;
+    padding: 40px 20px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.event-card {
+    background: var(--white);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.event-date {
+    background: var(--primary-blue);
+    color: var(--white);
+    padding: 10px;
+    text-align: center;
+}
+
+.event-content {
+    padding: 20px;
+    flex-grow: 1;
+}
+
+.event-title {
+    color: var(--primary-blue);
+    margin-bottom: 10px;
+}
+
+.spotlight-section {
+    padding: 60px 20px;
+    background: linear-gradient(rgba(0, 45, 98, 0.9), rgba(0, 45, 98, 0.9)), 
+                url('https://images.unsplash.com/photo-1523050854058-8df90110c9fHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80') center/cover;
+    color: var(--white);
+    text-align: center;
+}
+
+.spotlight-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.spotlight-title {
+    color: var(--golden-yellow);
+    margin-bottom: 20px;
+}
+
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 40px 20px;
+}
+
+.resource-item {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.resource-item:hover {
+    transform: translateY(-5px);
+}
+
+.resource-icon {
+    font-size: 2em;
+    color: var(--primary-blue);
+    margin-bottom: 10px;
+}
+
+/* Additional section styling */
+.section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.welcome-message {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(to right, rgba(0, 45, 98, 0.05), rgba(0, 45, 98, 0.1));
+    border-radius: 15px;
+    margin: 40px auto;
+}
+
+.welcome-message h2 {
+    color: var(--primary-blue);
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.welcome-message p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #333;
+}
+
+.key-highlights {
+    padding: 40px 0;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.key-highlights h3 {
+    color: var(--primary-blue);
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.key-highlights ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.key-highlights li {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.key-highlights li:hover {
+    transform: translateY(-5px);
+}
+
+.key-highlights li strong {
+    color: var(--primary-blue);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.section-divider {
+    height: 3px;
+    background: linear-gradient(to right, var(--primary-blue), var(--golden-yellow));
+    margin: 40px auto;
+    max-width: 200px;
+    border-radius: 3px;
+}
+
+/* Additional Page Styles */
+.page-hero {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    overflow: hidden;
+}
+
+.about-hero {
+    background: linear-gradient(rgba(0, 45, 98, 0.8), rgba(0, 45, 98, 0.9)),
+                url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3') center/cover;
+}
+
+.academics-hero {
+    background: linear-gradient(rgba(0, 45, 98, 0.8), rgba(0, 45, 98, 0.9)),
+                url('https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?ixlib=rb-4.0.3') center/cover;
+}
+
+.contact-hero {
+    background: linear-gradient(rgba(0, 45, 98, 0.8), rgba(0, 45, 98, 0.9)),
+                url('https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3') center/cover;
+}
+
+.page-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.page-hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--golden-yellow);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.page-hero-subtitle {
+    font-size: 1.5rem;
+    color: var(--white);
+    margin-bottom: 2rem;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 40px 20px;
+}
+
+.about-card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.about-card h3 {
+    color: var(--primary-blue);
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.about-icon {
+    font-size: 2.5rem;
+    color: var(--golden-yellow);
+    margin-bottom: 20px;
+}
+
+.timeline {
+    position: relative;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.timeline::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    background-color: #1a237e;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -3px;
+    border-radius: 3px;
+}
+
+.timeline-item {
+    padding: 10px 40px;
+    position: relative;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    right: -12px;
+    top: 15px;
+    background-color: #ffd700;
+    border: 4px solid #1a237e;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.timeline-item.left {
+    left: 0;
+}
+
+.timeline-item.right {
+    left: 50%;
+}
+
+.timeline-item.right::after {
+    left: -12px;
+}
+
+.timeline-content {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.timeline-year {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #1a237e;
+    margin-bottom: 10px;
+}
+
+.timeline-content p {
+    margin: 0;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Add arrow to timeline content */
+.timeline-item.left .timeline-content::before {
+    content: '';
+    position: absolute;
+    right: -10px;
+    top: 15px;
+    border-style: solid;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent white;
+}
+
+.timeline-item.right .timeline-content::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 15px;
+    border-style: solid;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent white transparent transparent;
+}
+
+/* Responsive Timeline */
+@media screen and (max-width: 768px) {
+    .timeline::after {
+        left: 31px;
+    }
+    
+    .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+    }
+    
+    .timeline-item.right {
+        left: 0;
+    }
+    
+    .timeline-item.left::after,
+    .timeline-item.right::after {
+        left: 19px;
+    }
+    
+    .timeline-item.left .timeline-content::before,
+    .timeline-item.right .timeline-content::before {
+        left: -10px;
+        border-width: 10px 10px 10px 0;
+        border-color: transparent white transparent transparent;
+    }
+}
+
+.contact-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    padding: 40px 20px;
+    background: #f5f5f5;
+}
+
+.contact-card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.contact-icon {
+    font-size: 2.5rem;
+    color: var(--primary-blue);
+    margin-bottom: 20px;
+}
+
+.contact-form {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--primary-blue);
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+.submit-btn {
+    background: var(--primary-blue);
+    color: var(--white);
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: #001f44;
+}
+
+/* Academics Section Styles */
+.academics-container {
+    padding: 40px 20px;
+    background: #f8f9fa;
+}
+
+.program-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.program-card {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.program-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.program-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--golden-yellow);
+}
+
+.program-card h3 {
+    color: var(--primary-blue);
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.program-card .grade {
+    color: var(--golden-yellow);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: inline-block;
+    padding: 5px 15px;
+    background: rgba(255, 193, 7, 0.1);
+    border-radius: 20px;
+}
+
+.program-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.program-card ul li {
+    padding: 10px 0;
+    padding-left: 30px;
+    position: relative;
+    border-bottom: 1px solid #eee;
+}
+
+.program-card ul li:last-child {
+    border-bottom: none;
+}
+
+.program-card ul li::before {
+    content: '\f00c';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: var(--golden-yellow);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.feature-card {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: var(--golden-yellow);
+    margin-bottom: 20px;
+    height: 80px;
+    width: 80px;
+    line-height: 80px;
+    border-radius: 50%;
+    background: rgba(255, 193, 7, 0.1);
+    margin: 0 auto 20px;
+}
+
+.feature-card h3 {
+    color: var(--primary-blue);
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.feature-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.achievements-section {
+    background: linear-gradient(to right, var(--primary-blue), #004d99);
+    padding: 60px 0;
+    color: var(--white);
+    margin: 40px 0;
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    text-align: center;
+}
+
+.achievement-item {
+    padding: 20px;
+}
+
+.achievement-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--golden-yellow);
+    margin-bottom: 10px;
+}
+
+.achievement-text {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.facilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.facility-card {
+    position: relative;
+    height: 200px;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.facility-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.facility-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 45, 98, 0.9));
+    padding: 20px;
+    color: var(--white);
+}
+
+.facility-card:hover .facility-image {
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .program-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .achievement-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
+    60% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Animation Classes */
+.animate {
+    opacity: 0;
+}
+
+.animate.fade-in-up {
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.animate.slide-in-left {
+    animation: slideInLeft 0.8s ease forwards;
+}
+
+.animate.slide-in-right {
+    animation: slideInRight 0.8s ease forwards;
+}
+
+.animate.scale-in {
+    animation: scaleIn 0.8s ease forwards;
+}
+
+.animate.bounce {
+    animation: bounce 1s ease forwards;
+    opacity: 1;
+}
+
+/* Add animation delays */
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+.delay-3 { animation-delay: 0.6s; }
+.delay-4 { animation-delay: 0.8s; }
+
+/* Hero Banner Animation */
+.hero-banner .content {
+    opacity: 0;
+    animation: fadeInUp 1s ease forwards;
+}
+
+.hero-banner .headline {
+    opacity: 0;
+    animation: slideInLeft 1s ease 0.3s forwards;
+}
+
+.hero-banner .subtext {
+    opacity: 0;
+    animation: slideInRight 1s ease 0.6s forwards;
+}
+
+.hero-banner .cta-button {
+    opacity: 0;
+    animation: fadeInUp 1s ease 0.9s forwards;
+}
+
+/* Card Animations */
+.about-card, .program-card, .feature-card, .contact-card {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.5s ease;
+}
+
+.about-card.show, .program-card.show, .feature-card.show, .contact-card.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Timeline Animations */
+.timeline-item {
+    opacity: 0;
+    transition: all 0.8s ease;
+}
+
+.timeline-item.left {
+    transform: translateX(-100px);
+}
+
+.timeline-item.right {
+    transform: translateX(100px);
+}
+
+.timeline-item.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Facilities Animation */
+.facility-card {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.5s ease;
+}
+
+.facility-card.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Quick Links Animation */
+.quick-link {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+}
+
+.quick-link.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Enhanced Page Transitions */
+.section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    display: none;
+    will-change: opacity, transform;
+}
+
+.section.active {
+    opacity: 1;
+    transform: translateY(0);
+    display: block;
+}
+
+/* Hero Section Animations */
+.hero-banner .content {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+.hero-banner .headline {
+    opacity: 0;
+    transform: translateX(-50px);
+    animation: slideInLeft 1s ease-out 0.3s forwards;
+}
+
+.hero-banner .subtext {
+    opacity: 0;
+    transform: translateX(50px);
+    animation: slideInRight 1s ease-out 0.6s forwards;
+}
+
+.hero-banner .cta-button {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s ease-out 0.9s forwards;
+}
+
+/* Enhanced Timeline Animations */
+.timeline-item {
+    opacity: 0;
+    transition: all 0.8s ease-out;
+}
+
+.timeline-item.left {
+    transform: translateX(-100px);
+}
+
+.timeline-item.right {
+    transform: translateX(100px);
+}
+
+.timeline-item.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.timeline-item:nth-child(1) { transition-delay: 0.2s; }
+.timeline-item:nth-child(2) { transition-delay: 0.4s; }
+.timeline-item:nth-child(3) { transition-delay: 0.6s; }
+.timeline-item:nth-child(4) { transition-delay: 0.8s; }
+
+/* Enhanced Card Hover Effects */
+.about-card, .program-card, .feature-card, .contact-card {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.5s ease-out;
+    will-change: transform, opacity, box-shadow;
+}
+
+.about-card:hover, .program-card:hover, .feature-card:hover, .contact-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Achievement Items Animation */
+.achievement-item {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.achievement-item.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.achievement-number {
+    display: inline-block;
+    animation: countUp 2s ease-out forwards;
+}
+
+@keyframes countUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Smooth Page Transitions */
+.page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-blue);
+    transform: translateY(100%);
+    z-index: 9999;
+    pointer-events: none;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-transition.active {
+    transform: translateY(0%);
+}
 {% endblock extrastyles %}
         
     </style>
@@ -382,104 +1374,406 @@ transform: scale(1.05);
     <div class="logo-container" id="logo-container">
       <img src="static/logo.png" alt="Logo" id="logo">
     </div>
-    <!-- Hero Banner -->
-    <div class="overlay"></div>
-    
-    <section class="hero-banner">
-      <div class="content">
-        <h1 class="headline">Welcome to <span class="highlight">BlueGold Academy</span></h1>
-        <p class="subtext">Where Education Meets Excellence</p>
-        <a href='#' data-target="about" class="cta-button">Discover More</a>
-    </div>
-    </section>
-      <section id="home" class="section">
-        <div class="welcome-message">
-            <h2 class="section-title">Welcome to BlueGold Academy</h2>
-            <p>At BlueGold Academy, we inspire minds, shape futures, and nurture excellence. Our campus is a vibrant hub where learning meets passion, and students discover their true potential.</p>
+    <section id="home" class="section">
+        <div class="hero-banner">
+            <div class="content">
+                <h1 class="headline">Welcome to <span class="highlight">JPR Educational Institute</span></h1>
+                <p class="subtext">Where Excellence Meets Education</p>
+                <a href="#about" class="cta-button">Discover More</a>
+            </div>
         </div>
-        <div class="key-highlights">
-            <h3>Why Choose Us?</h3>
-            <ul>
-                <li>💡 <strong>Innovative Curriculum:</strong> Designed to foster critical thinking and creativity.</li>
-                <li>🌍 <strong>Global Perspective:</strong> Empowering students to succeed in a connected world.</li>
-                <li>🎓 <strong>Exceptional Faculty:</strong> Experienced educators dedicated to student growth.</li>
-                <li>🏆 <strong>Outstanding Results:</strong> Proven track record of academic and extracurricular success.</li>
-            </ul>
+        <div class="section-container">
+            <div class="welcome-message">
+                <h2>Welcome to JPR Educational Institute</h2>
+                <p>At JPR Educational Institute, we believe in nurturing young minds through innovative education and holistic development. Our commitment to excellence and values creates an environment where students thrive and grow into future leaders.</p>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <div class="key-highlights">
+                <h3>Why Choose JPR?</h3>
+                <ul>
+                    <li>
+                        <div class="highlight-icon">💡</div>
+                        <div>
+                            <strong>Innovative Curriculum</strong>
+                            Designed to foster critical thinking and creativity in every student
+                        </div>
+                    </li>
+                    <li>
+                        <div class="highlight-icon">🌍</div>
+                        <div>
+                            <strong>Global Perspective</strong>
+                            Empowering students with skills for success in a connected world
+                        </div>
+                    </li>
+                    <li>
+                        <div class="highlight-icon">🎓</div>
+                        <div>
+                            <strong>Expert Faculty</strong>
+                            Experienced educators dedicated to nurturing student potential
+                        </div>
+                    </li>
+                    <li>
+                        <div class="highlight-icon">🏆</div>
+                        <div>
+                            <strong>Proven Excellence</strong>
+                            Outstanding track record in academics and extracurriculars
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- Quick Links Section -->
+            <section class="quick-links">
+                <h2 class="section-title">Quick Links</h2>
+                <div class="quick-links-grid">
+                    <div class="quick-link-card">
+                        <i class="fas fa-calendar"></i>
+                        <h3>Academic Calendar</h3>
+                        <p>Important dates and schedules</p>
+                    </div>
+                    <div class="quick-link-card">
+                        <i class="fas fa-book"></i>
+                        <h3>Student Portal</h3>
+                        <p>Access your academic resources</p>
+                    </div>
+                    <div class="quick-link-card">
+                        <i class="fas fa-user-graduate"></i>
+                        <h3>Parent Corner</h3>
+                        <p>Resources for parents</p>
+                    </div>
+                    <div class="quick-link-card">
+                        <i class="fas fa-bullhorn"></i>
+                        <h3>Latest Updates</h3>
+                        <p>News and announcements</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Upcoming Events Section -->
+            <section class="calendar-events">
+                <h2 class="section-title">Upcoming Events</h2>
+                <div class="calendar-grid">
+                    <div class="event-card">
+                        <div class="event-date">
+                            <h3>JAN 25</h3>
+                            <p>2025</p>
+                        </div>
+                        <div class="event-content">
+                            <h4 class="event-title">Parent-Teacher Meeting</h4>
+                            <p>Semester progress discussion</p>
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-date">
+                            <h3>FEB 10</h3>
+                            <p>2025</p>
+                        </div>
+                        <div class="event-content">
+                            <h4 class="event-title">Annual Science Exhibition</h4>
+                            <p>Student innovations showcase</p>
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-date">
+                            <h3>MAR 15</h3>
+                            <p>2025</p>
+                        </div>
+                        <div class="event-content">
+                            <h4 class="event-title">Sports Meet</h4>
+                            <p>Annual sports competition</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Student Spotlight Section -->
+            <section class="spotlight-section">
+                <div class="spotlight-content">
+                    <h2 class="spotlight-title">Student Achievements</h2>
+                    <p>Celebrating the remarkable accomplishments of our students in academics, sports, and community service at JPR Educational Institute.</p>
+                    <a href="#" class="cta-button">View Achievements</a>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Important Resources Section -->
+            <section class="resources">
+                <h2 class="section-title">Student Resources</h2>
+                <div class="resources-grid">
+                    <div class="resource-item">
+                        <div class="resource-icon">📚</div>
+                        <h3>Digital Library</h3>
+                        <p>Access study materials</p>
+                    </div>
+                    <div class="resource-item">
+                        <div class="resource-icon">🏆</div>
+                        <h3>Sports</h3>
+                        <p>Sports facilities and teams</p>
+                    </div>
+                    <div class="resource-item">
+                        <div class="resource-icon">🎨</div>
+                        <h3>Cultural Activities</h3>
+                        <p>Art and cultural programs</p>
+                    </div>
+                    <div class="resource-item">
+                        <div class="resource-icon">🚌</div>
+                        <h3>Transport</h3>
+                        <p>Bus routes and timings</p>
+                    </div>
+                </div>
+            </section>
         </div>
     </section>
   <section id="about" class="section">
-    <h2 class="section-title">About Us</h2>
-    <div class="about-content">
-        <p>BlueGold Academy has been a beacon of academic excellence since 1995. We are committed to providing quality education that nurtures both intellectual growth and character development.</p>
-        <div class="academics-grid">
-            <div class="program-card">
+    <!-- About Hero Section -->
+    <div class="page-hero about-hero">
+        <div class="page-hero-content">
+            <h1 class="page-hero-title">About JPR Educational Institute</h1>
+            <p class="page-hero-subtitle">Building Future Leaders Since 1995</p>
+        </div>
+    </div>
+
+    <div class="section-container">
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="about-icon"><i class="fas fa-eye"></i></div>
                 <h3>Our Vision</h3>
                 <p>To be a leading institution that shapes future leaders through innovative education and holistic development.</p>
             </div>
-            <div class="program-card">
+            <div class="about-card">
+                <div class="about-icon"><i class="fas fa-bullseye"></i></div>
                 <h3>Our Mission</h3>
                 <p>Providing excellence in education through dedicated teaching, modern facilities, and comprehensive development programs.</p>
             </div>
+            <div class="about-card">
+                <div class="about-icon"><i class="fas fa-star"></i></div>
+                <h3>Our Values</h3>
+                <p>Excellence, Integrity, Innovation, and Inclusivity form the cornerstone of our educational philosophy.</p>
+            </div>
         </div>
-    </div>
-</section>
 
-<!-- New Academics Section -->
-<section id="Academics" class="section">
-    <h2 class="section-title">Academic Programs</h2>
-    <div class="academics-grid">
-        <div class="program-card">
-            <h3>Primary Education</h3>
-            <p>Grades 1-5</p>
-            <ul>
-                <li>Foundation in core subjects</li>
-                <li>Creative arts and music</li>
-                <li>Physical education</li>
-            </ul>
-        </div>
-        <div class="program-card">
-            <h3>Middle School</h3>
-            <p>Grades 6-8</p>
-            <ul>
-                <li>Advanced core curriculum</li>
-                <li>STEAM programs</li>
-                <li>Leadership development</li>
-            </ul>
-        </div>
-        <div class="program-card">
-            <h3>High School</h3>
-            <p>Grades 9-12</p>
-            <ul>
-                <li>College preparation</li>
-                <li>Advanced Placement courses</li>
-                <li>Career guidance</li>
-            </ul>
-        </div>
-    </div>
-</section>
+        <div class="section-divider"></div>
 
-<!-- New Contact Section -->
-<section id="Contact-Us" class="section">
-    <h2 class="section-title">Contact Us</h2>
-    <div class="contact-form">
-        <form method="post" >
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" required>
+        <h2 class="section-title">Our Journey</h2>
+        <div class="timeline">
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <div class="timeline-year">1995</div>
+                    <p>Founded with a vision to provide quality education</p>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <div class="timeline-year">2005</div>
+                    <p>Expanded campus with state-of-the-art facilities</p>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="message">Message</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <div class="timeline-year">2015</div>
+                    <p>Introduced innovative STEM programs</p>
+                </div>
             </div>
-            <button type="submit" class="cta-button">Send Message</button>
-        </form>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <div class="timeline-year">2025</div>
+                    <p>Celebrating 30 years of educational excellence</p>
+                </div>
+            </div>
+        </div>
     </div>
-</section>
+  </section>
+
+  <!-- Academics Section -->
+  <section id="Academics" class="section">
+    <!-- Academics Hero Section -->
+    <div class="page-hero academics-hero">
+        <div class="page-hero-content">
+            <h1 class="page-hero-title">Academic Excellence</h1>
+            <p class="page-hero-subtitle">Nurturing Minds, Shaping Futures</p>
+        </div>
+    </div>
+
+    <div class="academics-container">
+        <h2 class="section-title">Our Academic Programs</h2>
+        <div class="program-grid">
+            <div class="program-card">
+                <h3>Primary Education</h3>
+                <span class="grade">Grades 1-5</span>
+                <ul>
+                    <li>Strong foundation in core subjects</li>
+                    <li>Activity-based learning approach</li>
+                    <li>Individual attention and care</li>
+                    <li>Regular parent-teacher interaction</li>
+                    <li>Emphasis on creative development</li>
+                </ul>
+            </div>
+            <div class="program-card">
+                <h3>Middle School</h3>
+                <span class="grade">Grades 6-8</span>
+                <ul>
+                    <li>Advanced curriculum with practical learning</li>
+                    <li>Introduction to specialized subjects</li>
+                    <li>Focus on critical thinking skills</li>
+                    <li>Regular assessments and feedback</li>
+                    <li>Leadership development programs</li>
+                </ul>
+            </div>
+            <div class="program-card">
+                <h3>High School</h3>
+                <span class="grade">Grades 9-12</span>
+                <ul>
+                    <li>Comprehensive board exam preparation</li>
+                    <li>Career counseling and guidance</li>
+                    <li>Advanced placement courses</li>
+                    <li>College readiness programs</li>
+                    <li>Specialized subject workshops</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2 class="section-title">Special Programs</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-microscope"></i>
+                </div>
+                <h3>STEM Education</h3>
+                <p>Advanced programs in Science, Technology, Engineering, and Mathematics with hands-on projects and experiments.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-language"></i>
+                </div>
+                <h3>Language Lab</h3>
+                <p>Modern language laboratory for enhancing communication skills in multiple languages.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-book-reader"></i>
+                </div>
+                <h3>Digital Library</h3>
+                <p>Access to vast digital resources and online learning materials for enhanced learning.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-running"></i>
+                </div>
+                <h3>Sports Academy</h3>
+                <p>Professional sports training facilities and expert coaches for athletic development.</p>
+            </div>
+        </div>
+
+        <div class="achievements-section">
+            <div class="container">
+                <div class="achievement-grid">
+                    <div class="achievement-item">
+                        <div class="achievement-number">98%</div>
+                        <div class="achievement-text">Board Exam Success Rate</div>
+                    </div>
+                    <div class="achievement-item">
+                        <div class="achievement-number">50+</div>
+                        <div class="achievement-text">Expert Faculty Members</div>
+                    </div>
+                    <div class="achievement-item">
+                        <div class="achievement-number">100%</div>
+                        <div class="achievement-text">College Placement</div>
+                    </div>
+                    <div class="achievement-item">
+                        <div class="achievement-number">25+</div>
+                        <div class="achievement-text">Years of Excellence</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Our Facilities</h2>
+        <div class="facilities-grid">
+            <div class="facility-card">
+                <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3" alt="Modern Labs" class="facility-image">
+                <div class="facility-overlay">
+                    <h3>Modern Laboratories</h3>
+                </div>
+            </div>
+            <div class="facility-card">
+                <img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Library" class="facility-image">
+                <div class="facility-overlay">
+                    <h3>Well-Stocked Library</h3>
+                </div>
+            </div>
+            <div class="facility-card">
+                <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-4.0.3" alt="Sports" class="facility-image">
+                <div class="facility-overlay">
+                    <h3>Sports Complex</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="Contact-Us" class="section">
+    <!-- Contact Hero Section -->
+    <div class="page-hero contact-hero">
+        <div class="page-hero-content">
+            <h1 class="page-hero-title">Contact Us</h1>
+            <p class="page-hero-subtitle">We'd Love to Hear from You</p>
+        </div>
+    </div>
+
+    <div class="section-container">
+        <div class="contact-info">
+            <div class="contact-card">
+                <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <h3>Address</h3>
+                <p>123 Education Street<br>City, State 12345</p>
+            </div>
+            <div class="contact-card">
+                <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                <h3>Phone</h3>
+                <p>Main: (123) 456-7890<br>Fax: (123) 456-7891</p>
+            </div>
+            <div class="contact-card">
+                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                <h3>Email</h3>
+                <p>info@jprinstitute.edu<br>admissions@jprinstitute.edu</p>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2 class="section-title">Send Us a Message</h2>
+        <div class="contact-form">
+            <form method="post" >
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+  </section>
 
   <!-- JavaScript for Menu Toggle -->
     {% endblock body %}
@@ -489,7 +1783,7 @@ transform: scale(1.05);
 const toggleButton = document.querySelector('.navbar-toggle');
 const sideNavbar = document.querySelector('.side-navbar');
 const links = document.querySelectorAll('.side-navbar a');
-const sections = document.querySelectorAll('section');
+const sections = document.querySelectorAll('.section');
 const body = document.body;
 const logoContainer = document.getElementById('logo-container');
 const logo = document.getElementById('logo');
@@ -497,42 +1791,354 @@ const logo = document.getElementById('logo');
 // Toggle Navbar and Blur Effect
 toggleButton.addEventListener('click', () => {
   sideNavbar.classList.toggle('active');
-  // Toggle blur effect on sections and footer
-  if (sideNavbar.classList.contains('active')) {
-    document.querySelectorAll('section, .footer').forEach(el => el.classList.add('blur'));
-  } else {
-    document.querySelectorAll('section, .footer').forEach(el => el.classList.remove('blur'));
-  }
+  
+  // Add blur effect to other elements
+  document.querySelectorAll('section, .footer').forEach(el => {
+    el.classList.toggle('blur');
+  });
 });
+
+// Function to show section
+function showSection(sectionId) {
+  // Hide all sections first
+  sections.forEach(section => {
+    section.style.display = 'none';
+    section.classList.remove('active');
+  });
+
+  // Show the target section
+  const targetSection = document.getElementById(sectionId);
+  if (targetSection) {
+    targetSection.style.display = 'block';
+    targetSection.classList.add('active');
+    // Update URL with the section ID
+    window.location.hash = sectionId;
+  }
+}
 
 // Handle Navbar Button Clicks
 links.forEach(link => {
-  link.addEventListener('click', () => {
-    // Hide all sections
-    sections.forEach(section => section.classList.remove('active'));
-
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    
+    // Get the target section ID
+    const targetId = link.dataset.target;
+    
     // Show the clicked section
-    const target = document.getElementById(link.dataset.target);
-    target.classList.add('active');
+    showSection(targetId);
 
-    // Close the navbar
+    // Close the navbar if open
     sideNavbar.classList.remove('active');
     
     // Remove blur effect
-    document.querySelectorAll('section, .footer').forEach(el => el.classList.remove('blur'));
+    document.querySelectorAll('section, .footer').forEach(el => {
+      el.classList.remove('blur');
+    });
   });
 });
+
+// Handle URL changes and initial load
+function handleURL() {
+  // Get the current hash without the #
+  let hash = window.location.hash.slice(1);
+  
+  // If no hash, default to home
+  if (!hash) {
+    hash = 'home';
+    window.location.hash = 'home';
+  }
+  
+  // Show the appropriate section
+  showSection(hash);
+}
+
+// Listen for hash changes
+window.addEventListener('hashchange', handleURL);
+
+// Handle initial page load
+window.addEventListener('DOMContentLoaded', () => {
+  handleURL();
+});
+
 {% block script %}
 // Logo Animation - Hide after 3 seconds
 window.onload = () => {
   setTimeout(() => {
-    logoContainer.style.opacity = '0';
-    logoContainer.style.visibility = 'hidden'; // Hide logo after animation
-  }, 3000); // After 3 seconds, hide the logo and show the landing page
+    document.querySelector('.logo-container').style.display = 'none';
+  }, 3000);
 };
 {% endblock script %}
 
-   
-    </script>
+// Animation Observer
+function setupAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+                
+                // Special animation for achievement numbers
+                if (entry.target.classList.contains('achievement-item')) {
+                    const numberElement = entry.target.querySelector('.achievement-number');
+                    if (numberElement) {
+                        const finalNumber = numberElement.textContent;
+                        animateNumber(numberElement, finalNumber);
+                    }
+                }
+            }
+        });
+    }, { 
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+    });
+
+    // Observe all animatable elements
+    document.querySelectorAll('.page-hero, .about-card, .program-card, .feature-card, .contact-card, .timeline-item, .facility-card, .quick-link, .achievement-item').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+// Animate numbers function
+function animateNumber(element, finalNumber) {
+    const duration = 2000;
+    const startNumber = 0;
+    const increment = finalNumber.includes('+') ? 
+        parseInt(finalNumber) / (duration / 16) : 
+        parseInt(finalNumber) / (duration / 16);
+    let currentNumber = startNumber;
+
+    const updateNumber = () => {
+        currentNumber += increment;
+        if (currentNumber <= parseInt(finalNumber)) {
+            element.textContent = Math.floor(currentNumber) + (finalNumber.includes('+') ? '+' : '');
+            requestAnimationFrame(updateNumber);
+        } else {
+            element.textContent = finalNumber;
+        }
+    };
+
+    requestAnimationFrame(updateNumber);
+}
+
+// Enhanced section transition
+function showSection(sectionId) {
+    // Create transition overlay if it doesn't exist
+    let transition = document.querySelector('.page-transition');
+    if (!transition) {
+        transition = document.createElement('div');
+        transition.className = 'page-transition';
+        document.body.appendChild(transition);
+    }
+
+    // Start transition
+    transition.classList.add('active');
+
+    setTimeout(() => {
+        // Hide all sections
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                section.style.display = 'none';
+                section.classList.remove('active');
+            }, 300);
+        });
+
+        // Show new section
+        setTimeout(() => {
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                targetSection.classList.add('active');
+                
+                // Force reflow
+                void targetSection.offsetWidth;
+                
+                // Animate in
+                targetSection.style.opacity = '1';
+                targetSection.style.transform = 'translateY(0)';
+                
+                // Update URL
+                window.location.hash = sectionId;
+                
+                // Reset animations
+                setupAnimations();
+                
+                // Smooth scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // End transition
+                transition.classList.remove('active');
+            }
+        }, 300);
+    }, 300);
+}
+
+// Enhanced Animation Observer
+function setupAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+            }
+        });
+    }, { 
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+    });
+
+    // Observe all animatable elements
+    document.querySelectorAll('.page-hero, .about-card, .program-card, .feature-card, .contact-card, .timeline-item, .facility-card, .quick-link, .achievement-item').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+// Animate numbers function
+function animateNumber(element, finalNumber) {
+    const duration = 2000;
+    const startNumber = 0;
+    const increment = finalNumber.includes('+') ? 
+        parseInt(finalNumber) / (duration / 16) : 
+        parseInt(finalNumber) / (duration / 16);
+    let currentNumber = startNumber;
+
+    const updateNumber = () => {
+        currentNumber += increment;
+        if (currentNumber <= parseInt(finalNumber)) {
+            element.textContent = Math.floor(currentNumber) + (finalNumber.includes('+') ? '+' : '');
+            requestAnimationFrame(updateNumber);
+        } else {
+            element.textContent = finalNumber;
+        }
+    };
+
+    requestAnimationFrame(updateNumber);
+}
+
+// Enhanced section transition
+function showSection(sectionId) {
+    // Create transition overlay if it doesn't exist
+    let transition = document.querySelector('.page-transition');
+    if (!transition) {
+        transition = document.createElement('div');
+        transition.className = 'page-transition';
+        document.body.appendChild(transition);
+    }
+
+    // Start transition
+    transition.classList.add('active');
+
+    setTimeout(() => {
+        // Hide all sections
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                section.style.display = 'none';
+                section.classList.remove('active');
+            }, 300);
+        });
+
+        // Show new section
+        setTimeout(() => {
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                targetSection.classList.add('active');
+                
+                // Force reflow
+                void targetSection.offsetWidth;
+                
+                // Animate in
+                targetSection.style.opacity = '1';
+                targetSection.style.transform = 'translateY(0)';
+                
+                // Update URL
+                window.location.hash = sectionId;
+                
+                // Reset animations
+                setupAnimations();
+                
+                // Smooth scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // End transition
+                transition.classList.remove('active');
+            }
+        }, 300);
+    }, 300);
+}
+
+// Enhanced section transition
+function showSection(sectionId) {
+    // Hide all sections first
+    sections.forEach(section => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            section.style.display = 'none';
+            section.classList.remove('active');
+        }, 300);
+    });
+
+    // After short delay, show and animate the new section
+    setTimeout(() => {
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.style.display = 'block';
+            targetSection.classList.add('active');
+            
+            // Force a reflow
+            void targetSection.offsetWidth;
+            
+            // Animate in
+            targetSection.style.opacity = '1';
+            targetSection.style.transform = 'translateY(0)';
+            
+            // Update URL
+            window.location.hash = sectionId;
+            
+            // Reset and trigger animations
+            setupAnimations();
+            
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, 300);
+}
+
+// Initialize animations on page load
+window.addEventListener('DOMContentLoaded', () => {
+    handleURL();
+    setupAnimations();
+});
+
+// Handle URL changes
+function handleURL() {
+    let hash = window.location.hash.slice(1);
+    if (!hash) {
+        hash = 'home';
+        window.location.hash = 'home';
+    }
+    showSection(hash);
+}
+
+// Listen for hash changes
+window.addEventListener('hashchange', handleURL);
+
+// Handle navigation clicks
+links.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.dataset.target;
+        showSection(targetId);
+        
+        // Close navbar and remove blur
+        sideNavbar.classList.remove('active');
+        document.querySelectorAll('section, .footer').forEach(el => {
+            el.classList.remove('blur');
+        });
+    });
+});
+</script>
 </body>
 </html>
