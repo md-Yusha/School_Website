@@ -120,6 +120,10 @@ def dashboard(request,username):
     }
     transactions = Transactions.objects.filter(user=user).order_by('-date')
     return render(request,'student_dash/dashboard.html',{"student":user_data,'transactions': transactions})
+
+def gallery(request):
+    return render(request, 'gallery.html')
+
 def otp_api(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -368,5 +372,5 @@ def download_receipt(request, transaction_id):
     
     return response
 
-
-
+def gallery(request):
+    return render(request, 'gallery.html')

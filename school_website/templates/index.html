@@ -1531,6 +1531,168 @@ transform: scale(1.05);
                     </div>
                 </div>
             </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Gallery Preview Section -->
+            <section class="gallery-preview-section">
+                <div class="section-header">
+                    <h2 class="section-title">Our Gallery</h2>
+                    <p class="section-description">Glimpses of Life at JPR Educational Institute</p>
+                </div>
+                <div class="gallery-preview-grid">
+                    <div class="gallery-preview-item">
+                        <img src="{% static 'images/img1.jpg' %}" alt="School Logo">
+                        <div class="gallery-preview-overlay">
+                            <span class="gallery-preview-text">Campus Life</span>
+                        </div>
+                    </div>
+                    <div class="gallery-preview-item">
+                        <img src="{% static '/images/img2.jpg' %}" alt="School Logo">
+                        <div class="gallery-preview-overlay">
+                            <span class="gallery-preview-text">Academic Excellence</span>
+                        </div>
+                    </div>
+                    <div class="gallery-preview-item">
+                        <img src="{% static '/images/img3.jpg' %}" alt="School Logo">
+                        <div class="gallery-preview-overlay">
+                            <span class="gallery-preview-text">Sports Activities</span>
+                        </div>
+                    </div>
+                    <div class="gallery-preview-item">
+                        <img src="{% static '/images/img4.jpg' %}" alt="School Logo">
+                        <div class="gallery-preview-overlay">
+                            <span class="gallery-preview-text">Cultural Events</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="view-more-container">
+                    <a href="/gallery/" class="view-more-btn">View More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <style>
+                    .gallery-preview-section {
+                        padding: 60px 20px;
+                        background-color: #f8f9fa;
+                    }
+
+                    .section-header {
+                        text-align: center;
+                        margin-bottom: 40px;
+                    }
+
+                    .section-title {
+                        color: var(--primary-blue);
+                        font-size: 2.5rem;
+                        font-weight: 600;
+                        margin-bottom: 15px;
+                        font-family: 'Poppins', sans-serif;
+                    }
+
+                    .section-description {
+                        color: #666;
+                        font-size: 1.1rem;
+                        max-width: 600px;
+                        margin: 0 auto;
+                    }
+
+                    .gallery-preview-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                        gap: 25px;
+                        margin: 0 auto;
+                        max-width: 1200px;
+                    }
+
+                    .gallery-preview-item {
+                        position: relative;
+                        border-radius: 10px;
+                        overflow: hidden;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                        transition: transform 0.3s ease;
+                        aspect-ratio: 4/3;
+                    }
+
+                    .gallery-preview-item:hover {
+                        transform: translateY(-5px);
+                    }
+
+                    .gallery-preview-item img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        transition: transform 0.3s ease;
+                    }
+
+                    .gallery-preview-item:hover img {
+                        transform: scale(1.1);
+                    }
+
+                    .gallery-preview-overlay {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        background: linear-gradient(to top, rgba(0, 45, 98, 0.9), transparent);
+                        padding: 20px;
+                        transition: opacity 0.3s ease;
+                    }
+
+                    .gallery-preview-text {
+                        color: white;
+                        font-size: 1.2rem;
+                        font-weight: 500;
+                        font-family: 'Poppins', sans-serif;
+                    }
+
+                    .view-more-container {
+                        text-align: center;
+                        margin-top: 40px;
+                    }
+
+                    .view-more-btn {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 10px;
+                        background-color: var(--primary-blue);
+                        color: white;
+                        padding: 12px 30px;
+                        border-radius: 50px;
+                        text-decoration: none;
+                        font-family: 'Poppins', sans-serif;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                    }
+
+                    .view-more-btn:hover {
+                        background-color: #001f44;
+                        transform: translateY(-2px);
+                    }
+
+                    .view-more-btn i {
+                        transition: transform 0.3s ease;
+                    }
+
+                    .view-more-btn:hover i {
+                        transform: translateX(5px);
+                    }
+
+                    @media (max-width: 768px) {
+                        .section-title {
+                            font-size: 2rem;
+                        }
+
+                        .gallery-preview-grid {
+                            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                            gap: 15px;
+                        }
+
+                        .gallery-preview-text {
+                            font-size: 1rem;
+                        }
+                    }
+                </style>
+            </section>
+
         </div>
     </section>
   <section id="about" class="section">
@@ -2012,60 +2174,6 @@ function animateNumber(element, finalNumber) {
     };
 
     requestAnimationFrame(updateNumber);
-}
-
-// Enhanced section transition
-function showSection(sectionId) {
-    // Create transition overlay if it doesn't exist
-    let transition = document.querySelector('.page-transition');
-    if (!transition) {
-        transition = document.createElement('div');
-        transition.className = 'page-transition';
-        document.body.appendChild(transition);
-    }
-
-    // Start transition
-    transition.classList.add('active');
-
-    setTimeout(() => {
-        // Hide all sections
-        sections.forEach(section => {
-            section.style.opacity = '0';
-            section.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                section.style.display = 'none';
-                section.classList.remove('active');
-            }, 300);
-        });
-
-        // Show new section
-        setTimeout(() => {
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.style.display = 'block';
-                targetSection.classList.add('active');
-                
-                // Force reflow
-                void targetSection.offsetWidth;
-                
-                // Animate in
-                targetSection.style.opacity = '1';
-                targetSection.style.transform = 'translateY(0)';
-                
-                // Update URL
-                window.location.hash = sectionId;
-                
-                // Reset animations
-                setupAnimations();
-                
-                // Smooth scroll to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                
-                // End transition
-                transition.classList.remove('active');
-            }
-        }, 300);
-    }, 300);
 }
 
 // Enhanced section transition
