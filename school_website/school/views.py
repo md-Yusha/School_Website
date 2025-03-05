@@ -344,7 +344,7 @@ def download_receipt(request, transaction_id):
     if transaction.status:
         hash_data = f"{transaction.transaction_id}{transaction.date}{transaction.amount}".encode()
         digital_signature = sha256(hash_data).hexdigest()
-    logo_url = request.build_absolute_uri(static('logo.png'))
+    logo_url = request.build_absolute_uri(static('images/logo.JPG'))
     # Context for the receipt template
     context = {
         'name': user_profile.Name,
