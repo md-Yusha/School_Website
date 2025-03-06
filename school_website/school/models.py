@@ -13,6 +13,30 @@ class UserProfile(models.Model):
     alt_number = models.CharField(max_length=15, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
 
+class PaymentCategory(models.Model):
+    CATEGORY_CHOICES = [
+        ('tuition', 'Tuition'),
+        ('transport', 'Transport'),
+        ('book', 'Book'),
+        ('uniform', 'Uniform'),
+        ('competitive', 'Competitive'),
+        ('celebrations', 'Celebrations'),
+        ('admission', 'Admission'),
+        ('application', 'Application'),
+        ('others', 'Others'),
+    ]
+    
+    transaction = models.ForeignKey('Transactions', on_delete=models.CASCADE, related_name='categories')
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.TextField(blank=True, null=True, help_text='Required for Others category')
+
+    def __str__(self):
+        return f"{self.get_category_display()} - ₹{self.amount}"
+
+    class Meta:
+        verbose_name_plural = "Payment Categories"
+
 class Transactions(models.Model):
     PAYMENT_MODES = (
         ('Online', 'Online'),
@@ -20,7 +44,7 @@ class Transactions(models.Model):
     )
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
     transaction_id = models.CharField(max_length=100, unique=True)
     status = models.BooleanField(default=False)
@@ -31,5 +55,5 @@ class Transactions(models.Model):
         verbose_name_plural = "Transactions"
 
     def __str__(self):
-        return f"{self.user.username} - {self.amount} - {self.date}"
+        return f"{self.user.username} - {self.total_amount} - {self.date}"
     

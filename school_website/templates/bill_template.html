@@ -59,6 +59,28 @@
         background-color: #f4f4f4;
         color: #333;
       }
+      .payment-categories {
+        margin: 20px 20px;
+      }
+      .payment-categories table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      .payment-categories th,
+      .payment-categories td {
+        text-align: left;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+      }
+      .payment-categories th {
+        background-color: #f4f4f4;
+        color: #333;
+      }
+      .total-row {
+        font-weight: bold;
+        background-color: #f9f9f9;
+      }
       .footer {
         text-align: center;
         margin-top: 20px;
@@ -102,14 +124,6 @@
             <td>{{ date }}</td>
           </tr>
           <tr>
-            <th>Amount</th>
-            <td>₹{{ amount }}</td>
-          </tr>
-          <tr>
-            <th>Fee Due</th>
-            <td>₹{{ fee_due }}</td>
-          </tr>
-          <tr>
             <th>Payment Mode</th>
             <td>{{ payment_mode }}</td>
           </tr>
@@ -126,15 +140,44 @@
         </table>
       </div>
 
-      <!-- Inside bill_template.html -->
+      <div class="payment-categories">
+        <h3>Payment Details</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for category in payment_categories %}
+            <tr>
+              <td>{{ category.get_category_display }}</td>
+              <td>₹{{ category.amount }}</td>
+              <td>{{ category.description|default:'' }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="total-row">
+              <td>Total Amount</td>
+              <td>₹{{ total_amount }}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Fee Due</td>
+              <td>₹{{ fee_due }}</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       {% if status %}
-      <!-- Digital Signature for successful payment -->
       <div class="signature">
         <p>Digitally Signed by Public School</p>
-        <p style="font-size: 10px">{{ digital_signature}}</p>
+        <p style="font-size: 10px">{{ digital_signature }}</p>
       </div>
       {% else %}
-      <!-- Authorized Signature for pending payments -->
       <div class="signature">
         <p>Authorized Signature</p>
         <div class="signature-line"></div>

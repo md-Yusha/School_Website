@@ -342,7 +342,7 @@ def download_receipt(request, transaction_id):
     # Generate Digital Signature if the payment is successful
     digital_signature = None
     if transaction.status:
-        hash_data = f"{transaction.transaction_id}{transaction.date}{transaction.amount}".encode()
+        hash_data = f"{transaction.transaction_id}{transaction.date}{transaction.total_amount}".encode()
         digital_signature = sha256(hash_data).hexdigest()
     logo_url = request.build_absolute_uri(static('images/logo.JPG'))
     
@@ -350,7 +350,7 @@ def download_receipt(request, transaction_id):
     context = {
         'name': user_profile.Name,
         'date': transaction.date,
-        'amount': transaction.amount,
+        'total_amount': transaction.total_amount,
         'fee_due': user_profile.Fee_Due,
         'payment_mode': transaction.payment_mode,
         'transaction_id': transaction.transaction_id if transaction.payment_mode != "cash" else None,
@@ -358,6 +358,7 @@ def download_receipt(request, transaction_id):
         'digital_signature': digital_signature,
         'status': transaction.status,
         'logo_url': logo_url,
+        'payment_categories': transaction.categories.all(),
     }
 
     # Render the HTML template as a string
