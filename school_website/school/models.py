@@ -6,12 +6,16 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     Name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
-    Fee_Due = models.IntegerField(default=0)
+    Fee_Due = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     Class = models.CharField(max_length=3) 
     Father_name = models.CharField(max_length=100, blank=True, null=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     alt_number = models.CharField(max_length=15, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
+    registration_number = models.CharField(max_length=20, unique=True, help_text="Student's unique registration number")
+
+    def __str__(self):
+        return self.Name
 
 class PaymentCategory(models.Model):
     CATEGORY_CHOICES = [

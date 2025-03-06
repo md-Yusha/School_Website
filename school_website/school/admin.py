@@ -46,9 +46,10 @@ def add_fee_due(modeladmin, request, queryset):
 add_fee_due.short_description = "Set Fee Due for selected users"
 
 class UserProfileAdmin(admin.ModelAdmin):
-    search_fields = ['user__username', 'email']
-    list_display = ['user', 'Name', 'email', 'Fee_Due', 'Class']
-    list_filter = (AmountRangeFilter,)
+    search_fields = ('Name', 'registration_number', 'Class', 'phone_number', 'email')
+    list_display = ('Name', 'registration_number', 'Class', 'phone_number', 'email', 'Fee_Due')
+    list_filter = ('Class',)
+    ordering = ('Name',)
     actions = [add_fee_due] 
 
 class PaymentCategoryInline(admin.TabularInline):

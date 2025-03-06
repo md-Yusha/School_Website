@@ -1,15 +1,20 @@
-from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .models import UserProfile,Transactions
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
+from django.templatetags.static import static
+from django.utils import timezone
+from .models import UserProfile, Transactions, PaymentCategory
+from datetime import datetime, timedelta
+import json
+import hashlib
+from hashlib import sha256
 from email.mime.text import MIMEText
 from random import randint
 import smtplib
-import json
-from datetime import datetime, timedelta
-from django.contrib.auth import authenticate,login,logout
 from cashfree_pg.models.create_order_request import CreateOrderRequest
 from cashfree_pg.api_client import Cashfree
 from cashfree_pg.models.customer_details import CustomerDetails
@@ -17,18 +22,10 @@ from cashfree_pg.models.order_meta import OrderMeta
 from urllib3.exceptions import InsecureRequestWarning
 import warnings
 from django.db.models import F
-from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
-import hashlib
 from reportlab.lib.pagesizes import letter
-from django.template.loader import render_to_string
 from weasyprint import HTML
-from hashlib import sha256
-from django.template.loader import render_to_string
-from django.templatetags.static import static
-
-
 
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 # Create your views here.
@@ -117,6 +114,7 @@ def dashboard(request,username):
         'alt_number': user_profile.alt_number,
         'address': user_profile.address,
         'fee_due': user_profile.Fee_Due,
+        'registration_number': user_profile.registration_number,
     }
     transactions = Transactions.objects.filter(user=user).order_by('-date')
     return render(request,'student_dash/dashboard.html',{"student":user_data,'transactions': transactions})
@@ -349,6 +347,8 @@ def download_receipt(request, transaction_id):
     # Context for the receipt template
     context = {
         'name': user_profile.Name,
+        'registration_number': user_profile.registration_number,
+        'class': user_profile.Class,
         'date': transaction.date,
         'total_amount': transaction.total_amount,
         'fee_due': user_profile.Fee_Due,
@@ -358,7 +358,6 @@ def download_receipt(request, transaction_id):
         'digital_signature': digital_signature,
         'status': transaction.status,
         'logo_url': logo_url,
-        'payment_categories': transaction.categories.all(),
     }
 
     # Render the HTML template as a string
