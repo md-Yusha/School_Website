@@ -211,7 +211,7 @@
         /* Logout Button */
         .logout {
             position: absolute;
-            top: 20px;
+            top: 30px;
             right: 20px;
         }
     
@@ -310,21 +310,51 @@
         .navbar-toggle .bar2 {
             background-color: grey;
         }
+
+        /* Back to Home Button Styles */
+        .back-home {
+            position: absolute;
+            top: 30px;
+            left: 120px;
+        }
+
+        .home-btn {
+            padding: 8px 16px;
+            font-size: 1rem;
+            color: var(--primary-blue);
+            background-color: var(--golden-yellow);
+            border: none;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;
+            font-family: 'Roboto', sans-serif;
+            display: inline-block;
+        }
+
+        .home-btn:hover {
+            background-color: var(--white);
+            color: var(--primary-blue);
+            transform: scale(1.05);
+        }
 {% endblock extrastyles %}
 {% block login %}
 {% endblock login %}
 {% block side-navbar %}
-       <div class="side-navbar">
-        <a href="{% url 'home' %}" data-target="home">Home</a>
-        <a href="{% url 'home' %}" data-target="about">About</a>
-        <a href="{% url 'home' %}" data-target="Contact Us">Contact Us</a>
-        <a href="{% url 'home' %}" data-target="Academics">Academics</a>
-      </div>
-       {% endblock side-navbar %}
+<div class="side-navbar">
+    <a href="{% url 'home' %}" data-target="home">Home</a>
+    <a href="{% url 'home' %}" data-target="about">About</a>
+    <a href="{% url 'home' %}" data-target="Contact-Us">Contact Us</a>
+    <a href="{% url 'home' %}" data-target="Academics">Academics</a>
+</div>
+{% endblock side-navbar %}
 {% block body %}
     <div class="logout">
         <button onclick="logout()">Logout</button>
     </div>    
+    <!-- Add Back to Home button -->
+    <div class="back-home">
+        <a href="{% url 'home' %}" class="home-btn">Back to Home</a>
+    </div>
     <div class="container">
         <h1>Student Dashboard</h1>
 
@@ -377,7 +407,7 @@
                     {% for transaction in transactions %}
                     <tr>
                         <td>{{ transaction.date }}</td>
-                        <td>₹{{ transaction.amount }}</td>
+                        <td>₹{{ transaction.total_amount }}</td>
                         <td>{{ transaction.transaction_id }}</td>
                         {% if transaction.status == False %}
                         <td>❌</td>
@@ -488,4 +518,12 @@
         window.location.href = '/logout'; // Redirect to the logout endpoint
     }
     
-    {% endblock script %}
+    // Update the section navigation code
+    document.querySelectorAll('.side-navbar a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('data-target');
+            window.location.href = `/#${targetId}`;  // Changed from /home# to /#
+        });
+    });
+{% endblock script %}
