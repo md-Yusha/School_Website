@@ -197,7 +197,7 @@
       .hero-banner {
         position: relative;
         width: 100%;
-        height: 90vh;
+        height: 100vh; /* Changed from 90vh to 100vh */
         background: linear-gradient(
                 to bottom,
                 rgba(0, 45, 98, 0.3),
@@ -210,56 +210,62 @@
         text-align: center;
         color: var(--white);
         overflow: hidden;
+        margin: 0; /* Added margin: 0 */
+        padding: 0; /* Added padding: 0 */
       }
 
       .hero-banner .content {
         position: relative;
         z-index: 2;
-        font-family: 'Poppins', sans-serif;
         padding: 2.5rem;
         max-width: 900px;
         margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
         border-radius: 20px;
-        transition: all 0.3s ease;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        transition: all 0.5s ease; /* Increased duration */
       }
 
-        .slideshow-container {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-        }
+      .hero-banner .content-wrapper {
+        padding: 2rem;
+        border-radius: 20px;
+        opacity: 0; /* Hide by default */
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+        background: transparent;
+      }
 
-        .slide {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          opacity: 0;
-          transition: opacity 1s ease-in-out;
-          object-fit: cover;
-        }
+      /* Show glass effect only on hover */
+      .hero-banner .content:hover .content-wrapper {
+        opacity: 1;
+        transform: translateY(0);
+        background: rgba(0, 45, 98, 0.3);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+      }
 
-        .slide.active {
+      .hero-banner .headline,
+      .hero-banner .subtext,
+      .hero-banner .cta-button {
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .hero-banner .content:hover .headline,
+      .hero-banner .content:hover .subtext,
+      .hero-banner .content:hover .cta-button {
+        visibility: visible;
         opacity: 1;
       }
 
+      /* Existing styles for headline, subtext, and cta-button remain the same */
       .headline {
         font-size: 3.5rem;
         font-weight: 800;
         text-transform: uppercase;
         color: var(--golden-yellow);
         margin-bottom: 1.5rem;
-        animation: fadeInDown 1.5s ease-in-out;
         line-height: 1.2;
         text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
       }
@@ -269,7 +275,6 @@
         font-weight: 400;
         font-family: 'Roboto', sans-serif;
         margin-bottom: 2.5rem;
-        animation: fadeInUp 1.5s ease-in-out;
         line-height: 1.4;
         color: var(--white);
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -286,7 +291,6 @@
         text-decoration: none;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-        animation: fadeInUp 1.8s ease-in-out;
       }
 
       .cta-button:hover {
@@ -295,95 +299,42 @@
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
       }
 
-      /* Responsive Design */
+      /* Responsive adjustments */
       @media (max-width: 768px) {
-        .hero-banner {
-            height: 100vh;
-            background-size: cover;
-            position: relative;
-        }
-
-        .hero-banner .content {
-            padding: 1rem;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background: linear-gradient(
-                to bottom,
-                rgba(0, 45, 98, 0.7),
-                rgba(0, 45, 98, 0.8)
-            );
+        .hero-banner .content-wrapper {
+          padding: 1.5rem;
         }
 
         .headline {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            line-height: 1.2;
+          font-size: 2.5rem;
         }
 
         .subtext {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.4;
+          font-size: 1.4rem;
         }
 
         .cta-button {
-            font-size: 1rem;
-            padding: 0.8rem 2rem;
-            margin-top: 1rem;
-        }
-
-        .slideshow-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-        .slide.active {
-            opacity: 1;
+          font-size: 1rem;
+          padding: 0.8rem 2rem;
         }
       }
 
       @media (max-width: 480px) {
-        .hero-banner {
-            height: 100vh;
-        }
-
-        .hero-banner .content {
-            padding: 0.8rem;
+        .hero-banner .content-wrapper {
+          padding: 1rem;
         }
 
         .headline {
-            font-size: 2rem;
-            margin-bottom: 0.8rem;
+          font-size: 2rem;
         }
 
         .subtext {
-            font-size: 1.1rem;
-            margin-bottom: 1.2rem;
+          font-size: 1.2rem;
         }
 
         .cta-button {
-            font-size: 0.9rem;
-            padding: 0.7rem 1.8rem;
+          font-size: 0.9rem;
+          padding: 0.7rem 1.8rem;
         }
       }
 
@@ -685,13 +636,15 @@
       .page-hero {
           position: relative;
           width: 100%;
-          height: 60vh;
+          height: 100vh; /* Changed from 60vh to 100vh */
           display: flex;
           align-items: center;
           justify-content: center;
           text-align: center;
           color: var(--white);
           overflow: hidden;
+          margin: 0; /* Added margin: 0 */
+          padding: 0; /* Added padding: 0 */
       }
 
       .about-hero {
@@ -1969,10 +1922,11 @@
       </div>
 
       <style>
+        /* Update the hero banner styles */
         .hero-banner {
           position: relative;
           width: 100%;
-          height: 90vh;
+          height: 100vh; /* Changed from 90vh to 100vh */
           background: linear-gradient(
             to bottom,
             rgba(0, 45, 98, 0.3),
@@ -1984,6 +1938,41 @@
           text-align: center;
           color: var(--white);
           overflow: hidden;
+          margin: 0; /* Added margin: 0 */
+          padding: 0; /* Added padding: 0 */
+        }
+
+        /* Update the page-hero styles for About, Academics, and Contact sections */
+        .page-hero {
+          position: relative;
+          width: 100%;
+          height: 100vh; /* Changed from 60vh to 100vh */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          color: var(--white);
+          overflow: hidden;
+          margin: 0; /* Added margin: 0 */
+          padding: 0; /* Added padding: 0 */
+        }
+
+        /* Update section styles to remove any potential gaps */
+        .section {
+          margin: 0;
+          padding: 0;
+        }
+
+        /* Update slideshow-container styles */
+        .slideshow-container {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+          margin: 0;
+          padding: 0;
         }
 
         .slide-wrapper {
@@ -2049,30 +2038,64 @@
           }
         }
 
+        /* Update hero banner content styles */
         .hero-banner .content {
           position: relative;
           z-index: 2;
-          font-family: 'Poppins', sans-serif;
           padding: 2.5rem;
           max-width: 900px;
           margin: 0 auto;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          background: transparent;
           border-radius: 20px;
-          transition: all 0.3s ease;
-          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+          transition: all 0.5s ease; /* Increased duration */
         }
 
+        /* Hide text and set initial state with smooth transitions */
+        .hero-banner .content .headline {
+          visibility: hidden;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.5s ease 0.1s; /* Added delay for headline */
+        }
+
+        .hero-banner .content .subtext {
+          visibility: hidden;
+            opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.5s ease 0.2s; /* Added delay for subtext */
+        }
+
+        .hero-banner .content .cta-button {
+          visibility: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+          transition: all 0.5s ease 0.3s; /* Added delay for button */
+        }
+
+        /* Show glass effect and text on hover */
+        .hero-banner .content:hover {
+          background: rgba(0, 45, 98, 0.3);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        }
+
+        /* Show text with smooth animation when hovering */
+        .hero-banner .content:hover .headline,
+        .hero-banner .content:hover .subtext,
+        .hero-banner .content:hover .cta-button {
+          visibility: visible;
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* Rest of the styles remain the same */
         .headline {
           font-size: 3.5rem;
           font-weight: 800;
           text-transform: uppercase;
           color: var(--golden-yellow);
           margin-bottom: 1.5rem;
-          animation: fadeInDown 1.5s ease-in-out;
           line-height: 1.2;
           text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
         }
@@ -2082,7 +2105,6 @@
           font-weight: 400;
           font-family: 'Roboto', sans-serif;
           margin-bottom: 2.5rem;
-          animation: fadeInUp 1.5s ease-in-out;
           line-height: 1.4;
           color: var(--white);
           text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -2099,7 +2121,6 @@
           text-decoration: none;
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
           transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-          animation: fadeInUp 1.8s ease-in-out;
         }
 
         .cta-button:hover {
