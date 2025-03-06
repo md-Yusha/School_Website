@@ -409,7 +409,7 @@
                 <tbody>
                     {% for transaction in transactions %}
                     <tr>
-                        <td>{{ transaction.date }}</td>
+                        <td>{{ transaction.date|date:"d M Y" }} {{ transaction.time|time:"H:i" }}</td>
                         <td>₹{{ transaction.total_amount }}</td>
                         <td>{{ transaction.transaction_id }}</td>
                         {% if transaction.status == False %}

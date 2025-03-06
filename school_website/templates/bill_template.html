@@ -129,7 +129,7 @@
           </tr>
           <tr>
             <th>Date</th>
-            <td>{{ date }}</td>
+            <td>{{ date|date:"d M Y" }} {{ time|time:"H:i" }}</td>
           </tr>
           <tr>
             <th>Payment Mode</th>

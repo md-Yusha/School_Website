@@ -350,6 +350,7 @@ def download_receipt(request, transaction_id):
         'registration_number': user_profile.registration_number,
         'class': user_profile.Class,
         'date': transaction.date,
+        'time': transaction.time,
         'total_amount': transaction.total_amount,
         'fee_due': user_profile.Fee_Due,
         'payment_mode': transaction.payment_mode,

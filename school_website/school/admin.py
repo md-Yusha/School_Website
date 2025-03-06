@@ -7,6 +7,8 @@ from django.urls import path
 from django.http import HttpResponse
 from django.utils.html import format_html
 from django import forms
+from django.db.models import Q
+from datetime import datetime, timedelta
 
 admin.site.site_header = "\n"
 admin.site.site_title = "Admin Portal"
@@ -47,10 +49,76 @@ add_fee_due.short_description = "Set Fee Due for selected users"
 
 class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ('Name', 'registration_number', 'Class', 'phone_number', 'email')
-    list_display = ('Name', 'registration_number', 'Class', 'phone_number', 'email', 'Fee_Due')
+    list_display = ('Name', 'registration_number', 'Class', 'phone_number', 'email', 'Fee_Due', 'view_transactions')
     list_filter = ('Class',)
     ordering = ('Name',)
-    actions = [add_fee_due] 
+    actions = [add_fee_due]
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('transactions/<int:user_id>/', self.admin_site.admin_view(self.view_transaction_history), name='user-transactions'),
+        ]
+        return custom_urls + urls
+
+    def view_transactions(self, obj):
+        return format_html(
+            '<a class="button" href="{}">View Transactions</a>',
+            f'/admin/school/userprofile/transactions/{obj.user.id}/'
+        )
+    view_transactions.short_description = 'Transactions'
+
+    def view_transaction_history(self, request, user_id):
+        user_profile = UserProfile.objects.get(user_id=user_id)
+        
+        # Get all transactions for this user
+        all_transactions = Transactions.objects.filter(user_id=user_id).order_by('-date')
+        
+        # Get one-time fees (only admission and application fees)
+        one_time_fees = all_transactions.filter(
+            categories__category__in=['admission', 'application']
+        ).distinct()
+
+        # Get all monthly fees (tuition)
+        monthly_fees = all_transactions.filter(
+            categories__category='tuition'
+        ).order_by('-date')
+
+        # Create a list of months with payment status
+        current_date = datetime.now()
+        months = []
+        for i in range(12):
+            month_date = current_date - timedelta(days=30*i)
+            month_str = month_date.strftime('%B %Y')
+            
+            # Get all transactions for this month
+            month_transactions = all_transactions.filter(
+                date__year=month_date.year,
+                date__month=month_date.month,
+                status=True  # Only count successful transactions
+            )
+            
+            # Calculate total amount for this month (all categories)
+            total_amount = sum(trans.total_amount for trans in month_transactions)
+            
+            # Get the latest transaction for this month
+            latest_transaction = month_transactions.first()
+            
+            months.append({
+                'month': month_str,
+                'paid': bool(latest_transaction),
+                'transaction': latest_transaction,
+                'total_amount': total_amount
+            })
+
+        context = {
+            'user_profile': user_profile,
+            'one_time_fees': one_time_fees,
+            'months': months,
+            'opts': self.model._meta,
+            'all_transactions': all_transactions,
+        }
+        return render(request, 'admin/transaction_history.html', context)
 
 class PaymentCategoryInline(admin.TabularInline):
     model = PaymentCategory
@@ -67,65 +135,63 @@ class TransactionsAdminForm(forms.ModelForm):
     class Meta:
         model = Transactions
         fields = '__all__'
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'time': forms.TimeInput(attrs={'type': 'time'}),
+        }
 
     def clean(self):
         cleaned_data = super().clean()
         if self.instance.pk:  # If this is an existing transaction
             return cleaned_data
-        
-        # For new transactions, total_amount will be calculated when saving
         return cleaned_data
 
 class TransactionsAdmin(admin.ModelAdmin):
     form = TransactionsAdminForm
     inlines = [PaymentCategoryInline]
     search_fields = ['transaction_id', 'user__username', 'date']
-    list_display = ['user', 'total_amount', 'date', 'transaction_id', 'status', 'payment_mode', 'received_by', 'download_receipt']
+    list_display = ['user', 'total_amount', 'date', 'time', 'transaction_id', 'status', 'payment_mode', 'received_by', 'download_receipt']
     list_filter = ['status', 'payment_mode', 'date']
     raw_id_fields = ['user']
     
+    class Media:
+        css = {
+            'all': ('admin/css/custom_admin.css',)
+        }
+        js = ('admin/js/transaction_admin.js',)
+
     def get_fields(self, request, obj=None):
         fields = list(super().get_fields(request, obj))
         if obj is None:  # This is an add form
             if 'payment_mode' in fields:
-                # Only hide transaction_id for cash payments
                 if 'transaction_id' in fields and request.POST.get('payment_mode') == 'Cash':
                     fields.remove('transaction_id')
             if 'total_amount' in fields:
-                fields.remove('total_amount')  # Hide total_amount as it will be calculated
+                fields.remove('total_amount')
         return fields
 
     def save_related(self, request, form, formsets, change):
-        # First, save the related objects (categories)
         super().save_related(request, form, formsets, change)
-        
-        # Calculate total amount from categories
         obj = form.instance
         total = sum(category.amount for category in obj.categories.all())
         obj.total_amount = total
         obj.save()
 
     def save_model(self, request, obj, form, change):
-        if not change:  # This is a new transaction being added
-            # Set received_by to current admin's username
+        if not change:
             obj.received_by = request.user.username
-            
-            # Set initial total_amount to 0, will be updated in save_related
             obj.total_amount = 0
             
-            # Only generate transaction ID for cash payments
             if obj.payment_mode == 'Cash':
                 from datetime import datetime
                 cash_trans_id = f"CASH-{datetime.now().strftime('%Y%m%d%H%M%S')}"
                 obj.transaction_id = cash_trans_id
-            # For online payments, ensure transaction_id is provided
             elif not obj.transaction_id:
                 from datetime import datetime
                 obj.transaction_id = f"ONLINE-{datetime.now().strftime('%Y%m%d%H%M%S')}"
         
         super().save_model(request, obj, form, change)
 
-        # Update user's fee due on successful transaction
         if obj.status:
             user_profile = UserProfile.objects.filter(user=obj.user).first()
             if user_profile:
@@ -138,18 +204,13 @@ class TransactionsAdmin(admin.ModelAdmin):
                 )
 
     def download_receipt(self, obj):
-        if obj.status:  # Only show download button for successful transactions
+        if obj.status:
             return format_html(
                 '<a class="button" href="/download_receipt/{transaction_id}/" target="_blank">Download Receipt</a>',
                 transaction_id=obj.transaction_id
             )
         return "N/A"
     download_receipt.short_description = 'Receipt'
-
-    class Media:
-        css = {
-            'all': ('admin/css/custom_admin.css',)
-        }
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Transactions, TransactionsAdmin)
