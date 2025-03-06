@@ -14,12 +14,22 @@ class UserProfile(models.Model):
     address = models.TextField(blank=True, null=True)
 
 class Transactions(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')
-    amount = models.IntegerField()
+    PAYMENT_MODES = (
+        ('Online', 'Online'),
+        ('Cash', 'Cash'),
+    )
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
-    transaction_id = models.CharField(max_length=100)
+    transaction_id = models.CharField(max_length=100, unique=True)
     status = models.BooleanField(default=False)
-    payment_mode = models.CharField(max_length=100)
+    payment_mode = models.CharField(max_length=10, choices=PAYMENT_MODES)
+    received_by = models.CharField(max_length=100, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "Transactions"
+
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username} - {self.amount} - {self.date}"
     

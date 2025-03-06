@@ -25,7 +25,7 @@
     <style>
               :root {
                   --primary-blue: #002D62;
-                  --golden-yellow: #FFD700;
+                  --golden-yellow:rgb(255, 255, 107);
                   --white: #ffffff;
               }
 
@@ -197,7 +197,7 @@
       .hero-banner {
         position: relative;
         width: 100%;
-        height: 90vh;
+        height: 100%;
         background: linear-gradient(
                 to bottom,
                 rgba(0, 45, 98, 0.3),
@@ -1946,19 +1946,35 @@
       <div class="hero-banner" id="about-hero-banner">
         <div class="slideshow-container">
           <div class="slide-wrapper">
-            <img src="{% static 'images/amit sir.JPG' %}" class="slide active" alt="Sri. Amit Kumar">
+            <img
+              src="{% static 'images/amit sir.JPG' %}"
+              class="slide active"
+              alt="Sri. Amit Kumar"
+            />
             <div class="slide-caption active">Sri. Amit Kumar - Chairman</div>
           </div>
           <div class="slide-wrapper">
-            <img src="{% static 'images/principal.JPG' %}" class="slide" alt="Ms. Srisha Balan">
+            <img
+              src="{% static 'images/principal.JPG' %}"
+              class="slide"
+              alt="Ms. Srisha Balan"
+            />
             <div class="slide-caption">Ms. Srisha Balan - Principal</div>
           </div>
           <div class="slide-wrapper">
-            <img src="{% static 'images/entrepreneur.jpg' %}" class="slide" alt="B.D. Mandal">
+            <img
+              src="{% static 'images/entrepreneur.jpg' %}"
+              class="slide"
+              alt="B.D. Mandal"
+            />
             <div class="slide-caption">B.D. Mandal - Entrepreneur</div>
           </div>
           <div class="slide-wrapper">
-            <img src="{% static 'images/mentor.jpg' %}" class="slide" alt="Sachchidanand Mandal">
+            <img
+              src="{% static 'images/mentor.jpg' %}"
+              class="slide"
+              alt="Sachchidanand Mandal"
+            />
             <div class="slide-caption">Sachchidanand Mandal - Mentor</div>
           </div>
         </div>
@@ -2052,7 +2068,7 @@
         .hero-banner .content {
           position: relative;
           z-index: 2;
-          font-family: 'Poppins', sans-serif;
+          font-family: "Poppins", sans-serif;
           padding: 2.5rem;
           max-width: 900px;
           margin: 0 auto;
@@ -2080,7 +2096,7 @@
         .subtext {
           font-size: 1.8rem;
           font-weight: 400;
-          font-family: 'Roboto', sans-serif;
+          font-family: "Roboto", sans-serif;
           margin-bottom: 2.5rem;
           animation: fadeInUp 1.5s ease-in-out;
           line-height: 1.4;
@@ -2098,7 +2114,8 @@
           text-transform: uppercase;
           text-decoration: none;
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-          transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+          transition: transform 0.3s ease, background-color 0.3s ease,
+            box-shadow 0.3s ease;
           animation: fadeInUp 1.8s ease-in-out;
         }
 
@@ -2171,47 +2188,88 @@
 
       <script>
         function aboutSlideShow() {
-          const slides = document.querySelectorAll('#about-hero-banner .slide');
+          const slides = document.querySelectorAll("#about-hero-banner .slide");
           let currentSlide = 0;
 
           setInterval(() => {
-            slides[currentSlide].classList.remove('active');
+            slides[currentSlide].classList.remove("active");
             currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
+            slides[currentSlide].classList.add("active");
           }, 5000);
         }
 
-        document.addEventListener('DOMContentLoaded', aboutSlideShow);
+        document.addEventListener("DOMContentLoaded", aboutSlideShow);
       </script>
 
       <div class="section-container">
         <h2 class="section-title">Our Leadership Team</h2>
-        
+
         <!-- Director Section -->
         <div class="leadership-section">
           <div class="leadership-content">
             <h3 class="leadership-title">Sri. Amit Kumar</h3>
             <h4 class="leadership-subtitle">Founder & Director</h4>
-            <p>Founder & Director of JPR Educational Institute, a pioneer and entrepreneur who believes that education knows no boundaries of growth. With the zeal of a visionary, he has ventured into areas of incipient development and worked tirelessly to enhance the infrastructure of the region and upgrade the socio-economic status of the residents.</p>
-            <p>A B.Tech graduate with a Master's in Computer Science & Engineering from Visvesvaraya Technological University, Belagavi, Karnataka, he is a computer professional with several years of experience in reputed IT companies as a senior software engineer.</p>
-            <p>His passion for teaching led him to drop offers from the largest IT companies to start his own venture, what's today known as JPR Educational Institute. He looks for a better world through students by contributing to the field of education, particularly working for underprivileged children.</p>
+            <p>
+              Founder & Director of JPR Educational Institute, a pioneer and
+              entrepreneur who believes that education knows no boundaries of
+              growth. With the zeal of a visionary, he has ventured into areas
+              of incipient development and worked tirelessly to enhance the
+              infrastructure of the region and upgrade the socio-economic status
+              of the residents.
+            </p>
+            <p>
+              A B.Tech graduate with a Master's in Computer Science &
+              Engineering from Visvesvaraya Technological University, Belagavi,
+              Karnataka, he is a computer professional with several years of
+              experience in reputed IT companies as a senior software engineer.
+            </p>
+            <p>
+              His passion for teaching led him to drop offers from the largest
+              IT companies to start his own venture, what's today known as JPR
+              Educational Institute. He looks for a better world through
+              students by contributing to the field of education, particularly
+              working for underprivileged children.
+            </p>
           </div>
           <div class="leadership-image">
-            <img src="{% static 'images/chairman1.JPG' %}" alt="Sri. Amit Kumar">
+            <img
+              src="{% static 'images/chairman1.JPG' %}"
+              alt="Sri. Amit Kumar"
+            />
           </div>
         </div>
 
         <!-- Executive Director Section -->
         <div class="leadership-section reverse">
           <div class="leadership-image">
-            <img src="{% static 'images/principle.JPG' %}" alt="Ms. Srisha Balan">
+            <img
+              src="{% static 'images/principle.JPG' %}"
+              alt="Ms. Srisha Balan"
+            />
           </div>
           <div class="leadership-content">
             <h3 class="leadership-title">Ms. Srisha Balan</h3>
             <h4 class="leadership-subtitle">Executive Director</h4>
-            <p>Ms. Srisha Balan is a graduate with post-graduation in organic chemistry from Andhra University, Andhra Pradesh. To enhance the quality of education and betterment, she later pursued B.Ed from Bangalore University.</p>
-            <p>With ten years of teaching experience, she was awarded as the best teacher during the academic year 2014 from ACE Creative Learning, Deeksha College, Bangalore. She believes that teaching with clarity, passion, empathy, and sincere enthusiasm effectively impacts learners, ultimately connecting them to their "Passion" and "Lifelong learning".</p>
-            <p>She has trained, guided & moulded students who secured ranks in various competitive entrance exams like AIEEE, IIT, and CET etc. She is an excellent counsellor with a methodology to deal with students to make a better future for them.</p>
+            <p>
+              Ms. Srisha Balan is a graduate with post-graduation in organic
+              chemistry from Andhra University, Andhra Pradesh. To enhance the
+              quality of education and betterment, she later pursued B.Ed from
+              Bangalore University.
+            </p>
+            <p>
+              With ten years of teaching experience, she was awarded as the best
+              teacher during the academic year 2014 from ACE Creative Learning,
+              Deeksha College, Bangalore. She believes that teaching with
+              clarity, passion, empathy, and sincere enthusiasm effectively
+              impacts learners, ultimately connecting them to their "Passion"
+              and "Lifelong learning".
+            </p>
+            <p>
+              She has trained, guided & moulded students who secured ranks in
+              various competitive entrance exams like AIEEE, IIT, and CET etc.
+              She is an excellent counsellor with a methodology to deal with
+              students to make a better future for them.
+            </p>
           </div>
         </div>
 
@@ -2220,25 +2278,57 @@
           <div class="leadership-content">
             <h3 class="leadership-title">B.D. Mandal</h3>
             <h4 class="leadership-subtitle">Entrepreneur</h4>
-            <p>He started his journey by taking up small jobs and is now a self-made man who runs a reputed company known as JPR construction Pvt. Ltd., where he has provided employment for many. It was because of his hard work, adaptability, and integrity that he has built his own business.</p>
-            <p>His vision is to bring a change in society by providing quality education. He believes in the quote: "Success is the result of perfection, hard work, learning from failure, loyalty, and persistence – Colin Powell"</p>
+            <p>
+              He started his journey by taking up small jobs and is now a
+              self-made man who runs a reputed company known as JPR construction
+              Pvt. Ltd., where he has provided employment for many. It was
+              because of his hard work, adaptability, and integrity that he has
+              built his own business.
+            </p>
+            <p>
+              His vision is to bring a change in society by providing quality
+              education. He believes in the quote: "Success is the result of
+              perfection, hard work, learning from failure, loyalty, and
+              persistence – Colin Powell"
+            </p>
           </div>
           <div class="leadership-image">
-            <img src="{% static 'images/entrepreneur.jpg' %}" alt="B.D. Mandal">
+            <img
+              src="{% static 'images/entrepreneur.jpg' %}"
+              alt="B.D. Mandal"
+            />
           </div>
         </div>
 
         <!-- Mentor Section -->
         <div class="leadership-section reverse">
           <div class="leadership-image">
-            <img src="{% static 'images/mentor.jpg' %}" alt="Sachchidanand Mandal">
+            <img
+              src="{% static 'images/mentor.jpg' %}"
+              alt="Sachchidanand Mandal"
+            />
           </div>
           <div class="leadership-content">
             <h3 class="leadership-title">Sachchidanand Mandal</h3>
             <h4 class="leadership-subtitle">Mentor & Counsellor</h4>
-            <p>Mr. S.N. Mandal is a graduate (Sec "A" & Sec "B") in Mechanical Engineering from Institution of Engineers (I), and a post-graduate from NIT, Jamshedpur, later pursued MBA from IGNOU. He was the first person from his hometown to become an Engineer and turned out to be the inspiration for many young minds.</p>
-            <p>With 42 years of experience, he retired as Assistant General Manager from TATA Motors Ltd. in 2011. He has a strong vision & clear goal for his core team with excellent mentoring.</p>
-            <p>Mr. Mandal is responsible for long-term perspective planning, leadership training, counselling, integrating parents, children & community, and implementing the institution's social responsibility.</p>
+            <p>
+              Mr. S.N. Mandal is a graduate (Sec "A" & Sec "B") in Mechanical
+              Engineering from Institution of Engineers (I), and a post-graduate
+              from NIT, Jamshedpur, later pursued MBA from IGNOU. He was the
+              first person from his hometown to become an Engineer and turned
+              out to be the inspiration for many young minds.
+            </p>
+            <p>
+              With 42 years of experience, he retired as Assistant General
+              Manager from TATA Motors Ltd. in 2011. He has a strong vision &
+              clear goal for his core team with excellent mentoring.
+            </p>
+            <p>
+              Mr. Mandal is responsible for long-term perspective planning,
+              leadership training, counselling, integrating parents, children &
+              community, and implementing the institution's social
+              responsibility.
+            </p>
           </div>
         </div>
 
@@ -2323,14 +2413,17 @@
             <div class="about-icon"><i class="fas fa-eye"></i></div>
             <h3>Our Vision</h3>
             <p>
-              To develop skill-driven students who can address global challenges through innovation, design thinking, and social responsibility.
+              To develop skill-driven students who can address global challenges
+              through innovation, design thinking, and social responsibility.
             </p>
           </div>
           <div class="about-card">
             <div class="about-icon"><i class="fas fa-bullseye"></i></div>
             <h3>Our Mission</h3>
             <p>
-              To prepare students for an agile economy while fostering sustainable growth, integrity, and creative problem-solving skills.
+              To prepare students for an agile economy while fostering
+              sustainable growth, integrity, and creative problem-solving
+              skills.
             </p>
           </div>
           <div class="about-card">
@@ -2352,7 +2445,10 @@
             <div class="timeline-content">
               <div class="timeline-year">1995</div>
               <div class="timeline-title">Foundation</div>
-              <p>Establishment of JPR Educational Institute with a commitment to quality education and holistic development.</p>
+              <p>
+                Establishment of JPR Educational Institute with a commitment to
+                quality education and holistic development.
+              </p>
             </div>
           </div>
           <div class="timeline-item">
@@ -2360,7 +2456,10 @@
             <div class="timeline-content">
               <div class="timeline-year">2000</div>
               <div class="timeline-title">Curriculum Enhancement</div>
-              <p>Introduction of CBSE curriculum and establishment of state-of-the-art laboratories and sports facilities.</p>
+              <p>
+                Introduction of CBSE curriculum and establishment of
+                state-of-the-art laboratories and sports facilities.
+              </p>
             </div>
           </div>
           <div class="timeline-item">
@@ -2368,7 +2467,10 @@
             <div class="timeline-content">
               <div class="timeline-year">2005</div>
               <div class="timeline-title">Infrastructure Growth</div>
-              <p>Expansion of campus infrastructure with modern classrooms, digital library, and advanced computer labs.</p>
+              <p>
+                Expansion of campus infrastructure with modern classrooms,
+                digital library, and advanced computer labs.
+              </p>
             </div>
           </div>
           <div class="timeline-item">
@@ -2376,7 +2478,10 @@
             <div class="timeline-content">
               <div class="timeline-year">2010</div>
               <div class="timeline-title">Global Initiatives</div>
-              <p>Launch of international exchange programs and establishment of career counseling center.</p>
+              <p>
+                Launch of international exchange programs and establishment of
+                career counseling center.
+              </p>
             </div>
           </div>
           <div class="timeline-item">
@@ -2384,7 +2489,10 @@
             <div class="timeline-content">
               <div class="timeline-year">2015</div>
               <div class="timeline-title">Academic Excellence</div>
-              <p>Introduction of innovative STEM programs and achievement of 100% board examination success rate.</p>
+              <p>
+                Introduction of innovative STEM programs and achievement of 100%
+                board examination success rate.
+              </p>
             </div>
           </div>
           <div class="timeline-item">
@@ -2392,7 +2500,10 @@
             <div class="timeline-content">
               <div class="timeline-year">2020</div>
               <div class="timeline-title">Digital Transformation</div>
-              <p>Implementation of smart classrooms and digital learning platforms for enhanced education delivery.</p>
+              <p>
+                Implementation of smart classrooms and digital learning
+                platforms for enhanced education delivery.
+              </p>
             </div>
           </div>
           <div class="timeline-item">
@@ -2400,7 +2511,10 @@
             <div class="timeline-content">
               <div class="timeline-year">2025</div>
               <div class="timeline-title">Milestone Achievement</div>
-              <p>Celebrating 30 years of excellence with recognition as one of the leading educational institutions in the region.</p>
+              <p>
+                Celebrating 30 years of excellence with recognition as one of
+                the leading educational institutions in the region.
+              </p>
             </div>
           </div>
         </div>
@@ -2933,21 +3047,21 @@
     </script>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener("DOMContentLoaded", function () {
         // Home page slideshow
-        const homeSlides = document.querySelectorAll('#hero-banner .slide');
+        const homeSlides = document.querySelectorAll("#hero-banner .slide");
         let currentHomeSlide = 0;
 
         function showHomeSlide(index) {
           // Remove active class from all slides
-          homeSlides.forEach(slide => {
-            slide.classList.remove('active');
-            slide.style.opacity = '0';
+          homeSlides.forEach((slide) => {
+            slide.classList.remove("active");
+            slide.style.opacity = "0";
           });
 
           // Add active class to current slide
-          homeSlides[index].classList.add('active');
-          homeSlides[index].style.opacity = '1';
+          homeSlides[index].classList.add("active");
+          homeSlides[index].style.opacity = "1";
         }
 
         function nextHomeSlide() {
@@ -2962,17 +3076,19 @@
         setInterval(nextHomeSlide, 5000);
 
         // About page slideshow code remains unchanged
-        const slideWrappers = document.querySelectorAll('.slide-wrapper');
+        const slideWrappers = document.querySelectorAll(".slide-wrapper");
         let currentSlide = 0;
 
         function showSlide(index) {
-          slideWrappers.forEach(wrapper => {
-            wrapper.querySelector('.slide').classList.remove('active');
-            wrapper.querySelector('.slide-caption').classList.remove('active');
+          slideWrappers.forEach((wrapper) => {
+            wrapper.querySelector(".slide").classList.remove("active");
+            wrapper.querySelector(".slide-caption").classList.remove("active");
           });
 
-          slideWrappers[index].querySelector('.slide').classList.add('active');
-          slideWrappers[index].querySelector('.slide-caption').classList.add('active');
+          slideWrappers[index].querySelector(".slide").classList.add("active");
+          slideWrappers[index]
+            .querySelector(".slide-caption")
+            .classList.add("active");
         }
 
         function nextSlide() {

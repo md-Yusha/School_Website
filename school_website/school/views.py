@@ -345,19 +345,19 @@ def download_receipt(request, transaction_id):
         hash_data = f"{transaction.transaction_id}{transaction.date}{transaction.amount}".encode()
         digital_signature = sha256(hash_data).hexdigest()
     logo_url = request.build_absolute_uri(static('images/logo.JPG'))
+    
     # Context for the receipt template
     context = {
         'name': user_profile.Name,
-        # 'usn': user_profile.usn,
         'date': transaction.date,
         'amount': transaction.amount,
         'fee_due': user_profile.Fee_Due,
         'payment_mode': transaction.payment_mode,
         'transaction_id': transaction.transaction_id if transaction.payment_mode != "cash" else None,
-        'receiver': "Public School" if transaction.payment_mode != "online" else None,
-        'digital_signature': digital_signature,  # Include the digital signature in the context
-        'status': transaction.status,  # Pass the payment status to determine which signature to show
-        'logo_url': logo_url,  # Include the logo URL in the context
+        'receiver': transaction.received_by if transaction.received_by else "Public School",
+        'digital_signature': digital_signature,
+        'status': transaction.status,
+        'logo_url': logo_url,
     }
 
     # Render the HTML template as a string
