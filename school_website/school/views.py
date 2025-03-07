@@ -115,6 +115,7 @@ def dashboard(request,username):
         'address': user_profile.address,
         'fee_due': user_profile.Fee_Due,
         'registration_number': user_profile.registration_number,
+        'profile_image': user_profile.profile_image.url if user_profile.profile_image else None,
     }
     transactions = Transactions.objects.filter(user=user).order_by('-date')
     return render(request,'student_dash/dashboard.html',{"student":user_data,'transactions': transactions})
@@ -158,7 +159,7 @@ def otp_api(request):
 
 def logoutUser(request):
     logout(request)
-    return redirect('login')
+    return redirect('home')
 
 def change_password(request):
     if request.method == 'POST':

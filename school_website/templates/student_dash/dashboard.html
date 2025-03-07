@@ -1,4 +1,5 @@
 {% extends "index.html" %}
+{% load static %}
 {% block scr %}<script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>{% endblock scr %}
 {% block title %}Student Dashboard{% endblock title %}
 {% block extrastyles %}
@@ -336,6 +337,42 @@
             color: var(--primary-blue);
             transform: scale(1.05);
         }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--primary-blue);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .student-details {
+            flex: 1;
+        }
+        
+        .student-details h2 {
+            margin: 0 0 10px 0;
+            color: var(--primary-blue);
+        }
+        
+        .student-details p {
+            margin: 5px 0;
+            color: var(--dark-gray);
+        }
 {% endblock extrastyles %}
 {% block login %}
 {% endblock login %}
@@ -363,10 +400,24 @@
             Fee Due: ₹{{ student.fee_due|default:0 }}
         </div>
 
-        <div class="details">
-            <div>
-                <strong>Registration Number:</strong> {{ student.registration_number }}
+        <div class="student-info">
+            <div class="profile-section">
+                <div class="profile-image">
+                    {% if student.profile_image %}
+                        <img src="{{ student.profile_image }}" alt="Profile Image">
+                    {% else %}
+                        <img src="{% static 'images/default-profile.png' %}" alt="Default Profile">
+                    {% endif %}
+                </div>
+                <div class="student-details">
+                    <h2>{{ student.name }}</h2>
+                    <p><strong>Registration Number:</strong> {{ student.registration_number }}</p>
+                    <p><strong>Class:</strong> {{ student.class }}</p>
+                </div>
             </div>
+        </div>
+
+        <div class="details">
             <div>
                 <strong>Username:</strong> {{ student.username }}
             </div>
@@ -374,13 +425,7 @@
                 <strong>Email:</strong> {{ student.email }}
             </div>
             <div>
-                <strong>Name:</strong> {{ student.name }}
-            </div>
-            <div>
                 <strong>Father's Name:</strong> {{ student.father_name }}
-            </div>
-            <div>
-                <strong>Class:</strong> {{ student.class }}
             </div>
             <div>
                 <strong>Phone Number:</strong> {{ student.phone_number }}

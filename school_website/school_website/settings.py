@@ -135,3 +135,6 @@ STATICFILES_DIRS = [
 #    'https://bfb4-2405-201-d01b-882a-9d5a-4b0d-cf91-da93.ngrok-free.app',  # Replace with your ngrok URL
 #]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

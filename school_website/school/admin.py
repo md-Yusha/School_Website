@@ -9,6 +9,7 @@ from django.utils.html import format_html
 from django import forms
 from django.db.models import Q
 from datetime import datetime, timedelta
+from django.utils.safestring import mark_safe
 
 admin.site.site_header = "\n"
 admin.site.site_title = "Admin Portal"
@@ -53,6 +54,26 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_filter = ('Class',)
     ordering = ('Name',)
     actions = [add_fee_due]
+    readonly_fields = ('profile_image_preview',)
+
+    def profile_image_preview(self, obj):
+        if obj.profile_image:
+            return mark_safe(f'<img src="{obj.profile_image.url}" style="max-height: 100px;"/>')
+        return "No image"
+    profile_image_preview.short_description = 'Profile Image Preview'
+
+    fieldsets = (
+        ('Personal Information', {
+            'fields': ('Name', 'Class', 'Father_name', 'phone_number', 'alt_number', 'address', 'email', 'registration_number')
+        }),
+        ('Financial Information', {
+            'fields': ('Fee_Due',)
+        }),
+        ('Profile Image', {
+            'fields': ('profile_image', 'profile_image_preview'),
+            'classes': ('collapse',)
+        }),
+    )
 
     def get_urls(self):
         urls = super().get_urls()
