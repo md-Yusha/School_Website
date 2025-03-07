@@ -150,7 +150,7 @@ class TransactionsAdmin(admin.ModelAdmin):
     form = TransactionsAdminForm
     inlines = [PaymentCategoryInline]
     search_fields = ['transaction_id', 'user__username', 'date']
-    list_display = ['user', 'total_amount', 'date', 'time', 'transaction_id', 'status', 'payment_mode', 'received_by', 'download_receipt']
+    list_display = ['get_student_name', 'total_amount', 'date', 'time', 'transaction_id', 'status', 'payment_mode', 'received_by', 'download_receipt']
     list_filter = ['status', 'payment_mode', 'date']
     raw_id_fields = ['user']
     
@@ -211,6 +211,11 @@ class TransactionsAdmin(admin.ModelAdmin):
             )
         return "N/A"
     download_receipt.short_description = 'Receipt'
+
+    def get_student_name(self, obj):
+        return obj.user.profile.Name
+    get_student_name.short_description = 'Student Name'
+    get_student_name.admin_order_field = 'user__profile__Name'
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Transactions, TransactionsAdmin)

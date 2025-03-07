@@ -359,6 +359,7 @@ def download_receipt(request, transaction_id):
         'digital_signature': digital_signature,
         'status': transaction.status,
         'logo_url': logo_url,
+        'payment_categories': transaction.categories.all(),
     }
 
     # Render the HTML template as a string
