@@ -50,11 +50,17 @@ add_fee_due.short_description = "Set Fee Due for selected users"
 
 class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ('Name', 'registration_number', 'Class', 'phone_number', 'email')
-    list_display = ('Name', 'registration_number', 'Class', 'phone_number', 'email', 'Fee_Due', 'view_transactions')
+    list_display = ('get_profile_image', 'Name', 'registration_number', 'Class', 'phone_number', 'email', 'Fee_Due', 'view_transactions')
     list_filter = ('Class',)
     ordering = ('Name',)
     actions = [add_fee_due]
     readonly_fields = ('profile_image_preview',)
+
+    def get_profile_image(self, obj):
+        if obj.profile_image:
+            return format_html('<img src="{}" width="80" height="80" style="border-radius: 50%; object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />', obj.profile_image.url)
+        return format_html('<img src="/static/images/default-profile.png" width="80" height="80" style="border-radius: 50%; object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />')
+    get_profile_image.short_description = ''
 
     def profile_image_preview(self, obj):
         if obj.profile_image:
