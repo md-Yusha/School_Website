@@ -48,10 +48,60 @@ def add_fee_due(modeladmin, request, queryset):
 
 add_fee_due.short_description = "Set Fee Due for selected users"
 
+class FeeDueRangeFilter(SimpleListFilter):
+    title = 'Fee Due Range'
+    parameter_name = 'fee_due_range'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('0_5000', 'Less than ₹5,000'),
+            ('5000_10000', '₹5,000 - ₹10,000'),
+            ('10000_20000', '₹10,000 - ₹20,000'),
+            ('20000_plus', 'More than ₹20,000'),
+            ('no_dues', 'No Dues'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == '0_5000':
+            return queryset.filter(Fee_Due__lt=5000)
+        if self.value() == '5000_10000':
+            return queryset.filter(Fee_Due__gte=5000, Fee_Due__lt=10000)
+        if self.value() == '10000_20000':
+            return queryset.filter(Fee_Due__gte=10000, Fee_Due__lt=20000)
+        if self.value() == '20000_plus':
+            return queryset.filter(Fee_Due__gte=20000)
+        if self.value() == 'no_dues':
+            return queryset.filter(Fee_Due=0)
+
+class PhoneVerifiedFilter(SimpleListFilter):
+    title = 'Phone Verification'
+    parameter_name = 'phone_verified'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('verified', 'Verified'),
+            ('unverified', 'Unverified'),
+            ('invalid', 'Invalid Number'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'verified':
+            return queryset.filter(phone_number__regex=r'^\d{10}$')
+        if self.value() == 'unverified':
+            return queryset.filter(phone_number__isnull=True)
+        if self.value() == 'invalid':
+            return queryset.exclude(phone_number__regex=r'^\d{10}$').exclude(phone_number__isnull=True)
+
 class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ('Name', 'registration_number', 'Class', 'phone_number', 'email')
     list_display = ('get_profile_image', 'Name', 'registration_number', 'Class', 'phone_number', 'email', 'Fee_Due', 'view_transactions')
-    list_filter = ('Class',)
+    list_filter = (
+        'Class',
+        FeeDueRangeFilter,
+        PhoneVerifiedFilter,
+        ('email', admin.EmptyFieldListFilter),  # Filter for empty/non-empty email
+        'registration_number',
+    )
     ordering = ('Name',)
     actions = [add_fee_due]
     readonly_fields = ('profile_image_preview',)
@@ -146,6 +196,12 @@ class UserProfileAdmin(admin.ModelAdmin):
             'all_transactions': all_transactions,
         }
         return render(request, 'admin/transaction_history.html', context)
+
+    class Media:
+        css = {
+            'all': ('admin/css/custom_admin.css',)
+        }
+        js = ('admin/js/custom_admin.js',)
 
 class PaymentCategoryInline(admin.TabularInline):
     model = PaymentCategory
