@@ -13,6 +13,7 @@ import json
 import hashlib
 from hashlib import sha256
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from random import randint
 import smtplib
 from cashfree_pg.models.create_order_request import CreateOrderRequest
@@ -30,6 +31,56 @@ from weasyprint import HTML
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 # Create your views here.
 def home(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        
+        # SMTP Configuration
+        sender_email = "info.jpreducation@gmail.com"  # Use your Gmail account
+        password = ""  # Add your app password or email password here
+        # To get an app password for Gmail:
+        # 1. Enable 2-Step Verification on your Google account
+        # 2. Go to https://myaccount.google.com/apppasswords
+        # 3. Select "Mail" and your device, then generate
+        # 4. Use the 16-character password generated here
+        recipient_email = "info.jpreducation@gmail.com"  # Where you want to receive messages
+        
+        # Create email
+        msg = MIMEMultipart()
+        msg['From'] = sender_email
+        msg['To'] = recipient_email
+        msg['Subject'] = f"Contact Form Submission from {name}"
+        
+        # Email body
+        body = f"""
+        You have received a new message from the contact form:
+        
+        Name: {name}
+        Email: {email}
+        
+        Message:
+        {message}
+        """
+        
+        msg.attach(MIMEText(body, 'plain'))
+        
+        try:
+            # Connect to Gmail SMTP server
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            server.login(sender_email, password)
+            
+            # Send email
+            server.send_message(msg)
+            server.quit()
+            
+            messages.success(request, 'Thank you for your message! We will get back to you soon.')
+        except Exception as e:
+            messages.error(request, f'Sorry, there was an error sending your message. Please try again later.')
+            
+        return redirect('/#Contact-Us')
+        
     return render(request,'index.html',{"user":str(request.user)})
 
 def loginUser(request):
@@ -343,7 +394,7 @@ def download_receipt(request, transaction_id):
     if transaction.status:
         hash_data = f"{transaction.transaction_id}{transaction.date}{transaction.total_amount}".encode()
         digital_signature = sha256(hash_data).hexdigest()
-    logo_url = request.build_absolute_uri(static('images/logo.JPG'))
+    logo_url = request.build_absolute_uri(static('images/logo.png'))
     
     # Context for the receipt template
     context = {

@@ -1453,6 +1453,35 @@
           width: 120px;
         }
       }
+
+      .form-group textarea {
+          height: 150px;
+          resize: vertical;
+      }
+
+      .messages-container {
+          max-width: 600px;
+          margin: 0 auto 20px;
+      }
+      
+      .message {
+          padding: 12px 15px;
+          margin-bottom: 15px;
+          border-radius: 5px;
+          font-weight: 500;
+      }
+      
+      .message.success {
+          background-color: #d4edda;
+          color: #155724;
+          border: 1px solid #c3e6cb;
+      }
+      
+      .message.error {
+          background-color: #f8d7da;
+          color: #721c24;
+          border: 1px solid #f5c6cb;
+      }
       {% endblock extrastyles %}
     </style>
   </head>
@@ -1483,7 +1512,7 @@
     </div>
     {% endblock side-navbar %} {% block body %}
     <div class="logo-container" id="logo-container">
-      <img src="static/images/logo.jpg" alt="Logo" id="logo" />
+      <img src="static/images/logo.png" alt="Logo" id="logo" />
     </div>
     <section id="home" class="section">
       <div class="hero-banner" id="hero-banner">
@@ -2714,25 +2743,36 @@
               <i class="fas fa-map-marker-alt"></i>
             </div>
             <h3>Address</h3>
-            <p>123 Education Street<br />City, State 12345</p>
+            <p>At- Boudhithaika, Khaira, Jamui,<br>Bihar-811317</p>
           </div>
           <div class="contact-card">
             <div class="contact-icon"><i class="fas fa-phone"></i></div>
             <h3>Phone</h3>
-            <p>Main: (123) 456-7890<br />Fax: (123) 456-7891</p>
+            <p>+91-9591500542<br>+91-8147274829</p>
           </div>
           <div class="contact-card">
             <div class="contact-icon"><i class="fas fa-envelope"></i></div>
             <h3>Email</h3>
-            <p>info@jprinstitute.edu<br />admissions@jprinstitute.edu</p>
+            <p>info.jpreducation@gmail.com</p>
           </div>
         </div>
 
         <div class="section-divider"></div>
 
         <h2 class="section-title">Send Us a Message</h2>
+        
+        {% if messages %}
+        <div class="messages-container">
+          {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        
         <div class="contact-form">
-          <form method="post">
+          <form method="post" action="/">
             {% csrf_token %}
             <div class="form-group">
               <label for="name">Name</label>
