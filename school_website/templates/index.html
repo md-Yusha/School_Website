@@ -40,7 +40,7 @@
                 left: 0;
                 width: 100vw;
                 height: 100vh;
-                background-color: #002D62;
+                background-color: --golden-yellow;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -58,8 +58,15 @@
                 0% {
                   transform: scale(1);
                 }
+                30% {
+                  //hello
+                }
                 50% {
-                  opacity: 75%;
+                  transform: scale(2);
+                }
+                90% {
+                  transform: scale(2);
+                  opacity: 70%;
                 }
                 100% {
                   transform: scale(20);
@@ -1463,20 +1470,20 @@
           max-width: 600px;
           margin: 0 auto 20px;
       }
-      
+
       .message {
           padding: 12px 15px;
           margin-bottom: 15px;
           border-radius: 5px;
           font-weight: 500;
       }
-      
+
       .message.success {
           background-color: #d4edda;
           color: #155724;
           border: 1px solid #c3e6cb;
       }
-      
+
       .message.error {
           background-color: #f8d7da;
           color: #721c24;
@@ -2105,15 +2112,15 @@
 
         .hero-banner .content .subtext {
           visibility: hidden;
-            opacity: 0;
+          opacity: 0;
           transform: translateY(20px);
           transition: all 0.5s ease 0.2s; /* Added delay for subtext */
         }
 
         .hero-banner .content .cta-button {
           visibility: hidden;
-            opacity: 0;
-            transform: translateY(20px);
+          opacity: 0;
+          transform: translateY(20px);
           transition: all 0.5s ease 0.3s; /* Added delay for button */
         }
 
@@ -2743,12 +2750,12 @@
               <i class="fas fa-map-marker-alt"></i>
             </div>
             <h3>Address</h3>
-            <p>At- Boudhithaika, Khaira, Jamui,<br>Bihar-811317</p>
+            <p>At- Boudhithaika, Khaira, Jamui,<br />Bihar-811317</p>
           </div>
           <div class="contact-card">
             <div class="contact-icon"><i class="fas fa-phone"></i></div>
             <h3>Phone</h3>
-            <p>+91-9591500542<br>+91-8147274829</p>
+            <p>+91-9591500542<br />+91-8147274829</p>
           </div>
           <div class="contact-card">
             <div class="contact-icon"><i class="fas fa-envelope"></i></div>
@@ -2760,17 +2767,19 @@
         <div class="section-divider"></div>
 
         <h2 class="section-title">Send Us a Message</h2>
-        
+
         {% if messages %}
         <div class="messages-container">
           {% for message in messages %}
-            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
-              {{ message }}
-            </div>
+          <div
+            class="message {% if message.tags %}{{ message.tags }}{% endif %}"
+          >
+            {{ message }}
+          </div>
           {% endfor %}
         </div>
         {% endif %}
-        
+
         <div class="contact-form">
           <form method="post" action="/">
             {% csrf_token %}
