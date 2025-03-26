@@ -302,4 +302,3 @@ class TransactionsAdmin(admin.ModelAdmin):
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Transactions, TransactionsAdmin)
-admin.site.register(PaymentCategory)

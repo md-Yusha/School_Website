@@ -25,7 +25,7 @@
     <style>
               :root {
                   --primary-blue: #002D62;
-                  --golden-yellow:rgb(255, 255, 107);
+                  --golden-yellow:rgba(223, 223, 69, 0.94);
                   --white: #ffffff;
               }
 
@@ -40,33 +40,34 @@
                 left: 0;
                 width: 100vw;
                 height: 100vh;
-                background-color: --golden-yellow;
+                background-color: #ffffff;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 z-index: 1000;
-                transition: opacity 1s ease;
+                opacity: 1;
+                transition: opacity 0.5s ease;
+              }
+
+              .logo-container.hidden {
+                opacity: 0;
+                pointer-events: none;
               }
 
               .logo-container img {
                 width: 450px;
-                animation: scaleLogo 3s ease-out forwards;
+                animation: scaleLogo 2s ease-out forwards;
                 filter: none;
               }
 
               @keyframes scaleLogo {
                 0% {
                   transform: scale(1);
-                }
-                30% {
-                  //hello
+                  opacity: 1;
                 }
                 50% {
-                  transform: scale(2);
-                }
-                90% {
-                  transform: scale(2);
-                  opacity: 70%;
+                  transform: scale(1.2);
+                  opacity: 1;
                 }
                 100% {
                   transform: scale(20);
@@ -1491,6 +1492,20 @@
       }
       {% endblock extrastyles %}
     </style>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const logoContainer = document.querySelector('.logo-container');
+        
+        // Hide loading animation when content starts loading
+        window.addEventListener('load', function() {
+          logoContainer.classList.add('hidden');
+          // Remove the container after animation completes
+          setTimeout(() => {
+            logoContainer.style.display = 'none';
+          }, 500);
+        });
+      });
+    </script>
   </head>
 
   <body>
