@@ -37,14 +37,15 @@ def home(request):
         message = request.POST.get('message')
         
         # SMTP Configuration
-        sender_email = "info.jpreducation@gmail.com"  # Use your Gmail account
-        password = ""  # Add your app password or email password here
+        sender_email = "proxybroproxy@gmail.com"  # Use your Gmail account
+        password = "Abcd@1234#"  # Add your app password or email password here
         # To get an app password for Gmail:
         # 1. Enable 2-Step Verification on your Google account
         # 2. Go to https://myaccount.google.com/apppasswords
         # 3. Select "Mail" and your device, then generate
         # 4. Use the 16-character password generated here
-        recipient_email = "info.jpreducation@gmail.com"  # Where you want to receive messages
+        recipient_email = "yushaoffline@gmail.com"
+        # recipient_email = "info.jpreducation@gmail.com"  # Where you want to receive messages
         
         # Create email
         msg = MIMEMultipart()
